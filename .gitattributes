@@ -7,6 +7,7 @@
 *.project text eol=crlf
 *.cproject text eol=crlf
 *.inf text eol=crlf
+*.spec text eol=crlf
 
 # These are binary so should never be modified by git.
 *.png binary
@@ -31,4 +32,5 @@
 *.bin binary -crlf
 *.bit binary -crlf
 *.bsp binary -crlf
+*.dsa binary -crlf
 *.a binary -crlf
