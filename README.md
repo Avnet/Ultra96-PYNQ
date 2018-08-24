@@ -5,13 +5,19 @@ This repository provides the board files for the
 
 ## Quick Start
 
-To use the board file along with the new sdbuild flow, simply do:
+To use the board file along with the new sdbuild flow, first do:
 
 ```shell
-git clone https://gitenterprise.xilinx.com/yunq/Ultra96.git <LOCAL>
+git clone https://github.com/yunqu/Ultra96.git <LOCAL>
 ```
 
-Then in your PYNQ repository (image v2.3), go to folder `/sdbuild` and do:
+Then download the Ultra96 BSP from [Xilinx website](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/embedded-design-tools.html). Copy it over to your local folder.
+
+```shell
+cp -f <DOWNLOADED_BSP> <LOCAL>/Ultra96
+```
+
+Then in your PYNQ repository (image v2.3), go to folder `sdbuild` and do:
 
 ```shell
 make BOARDDIR=<LOCAL>
