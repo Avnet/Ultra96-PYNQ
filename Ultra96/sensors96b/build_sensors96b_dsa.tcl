@@ -1,5 +1,5 @@
 set overlay_name "sensors96b"
-set design_name "system"
+set design_name "sensors96b"
 
 # open project and block design
 open_project -quiet ./${overlay_name}/${overlay_name}.xpr
