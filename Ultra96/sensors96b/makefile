@@ -1,13 +1,16 @@
 overlay_name := sensors96b
-design_name := system
+design_name := sensors96b
 
-all: bitstream dsa
+all: bitstream check_timing dsa
 	@echo
 	@tput setaf 2 ; echo "Built $(overlay_name) successfully!"; tput sgr0;
 	@echo
 
 bitstream:
 	vivado -mode batch -source $(overlay_name).tcl -notrace
+
+check_timing:
+	vivado -mode batch -source check_$(overlay_name).tcl -notrace
 
 dsa:
 	vivado -mode batch -source build_$(overlay_name)_dsa.tcl -notrace
