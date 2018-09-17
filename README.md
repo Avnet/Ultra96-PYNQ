@@ -8,7 +8,7 @@ This repository provides the board files for the
 To use the board file along with the new sdbuild flow, first do:
 
 ```shell
-git clone https://github.com/yunqu/Ultra96.git <LOCAL>
+git clone https://github.com/Avnet/Ultra96-PYNQ.git <LOCAL>
 ```
 
 Then download the Ultra96 BSP from [Xilinx website](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/embedded-design-tools.html). Copy it over to your local folder.
