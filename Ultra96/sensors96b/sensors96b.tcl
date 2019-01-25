@@ -1711,10 +1711,11 @@ update_compile_order -fileset sources_1
 launch_runs impl_1 -to_step write_bitstream -jobs 4
 wait_on_run impl_1
 
-# This hardware definition file will be used for microblaze projects
-file mkdir ./${overlay_name}/${overlay_name}.sdk
-write_hwdef -force  -file ./${overlay_name}/${overlay_name}.sdk/${overlay_name}.hdf
-file copy -force ./${overlay_name}/${overlay_name}.sdk/${overlay_name}.hdf .
+# Create overlay hardware definition file and bitstream
+write_hwdef -force  -file ./${overlay_name}.hdf
+file copy -force ./${overlay_name}/${overlay_name}.runs/impl_1/${design_name}_wrapper.bit ./${overlay_name}.bit
 
-# move and rename bitstream to final location
-file copy -force ./${overlay_name}/${overlay_name}.runs/impl_1/${design_name}_wrapper.bit ${overlay_name}.bit
+# Create files for optional PetaLinux integration
+file mkdir ./${overlay_name}/${overlay_name}.sdk
+file copy -force ./${overlay_name}/${overlay_name}.runs/impl_1/${design_name}_wrapper.sysdef ./${overlay_name}/${overlay_name}.sdk/${design_name}_wrapper.hdf
+file copy -force ./${overlay_name}/${overlay_name}.runs/impl_1/${design_name}_wrapper.bit ./${overlay_name}/${overlay_name}.sdk/${design_name}_wrapper.bit
