@@ -15,6 +15,7 @@ This repository contains source files and instructions for building PYNQ to run 
 * 2018.2 Xilinx Vivado or SDX and PetaLinux tools (Web-pack or full versions)
 * A free Xilinx developer account to obtain and license the tools: https://www.xilinx.com/registration/create-account.html
 * Note: If you purchase an Ultra96 board, a free voucher for the full-version Xilinx SDX tool suite and PetaLinux 2018.2 is included
+
 **Retrieve the main PYNQ repo:**
 ```shell
 git clone https://github.com/Xilinx/PYNQ.git <LOCAL PYNQ>
