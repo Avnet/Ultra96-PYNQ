@@ -1716,6 +1716,10 @@ write_hwdef -force  -file ./${overlay_name}.hdf
 file copy -force ./${overlay_name}/${overlay_name}.runs/impl_1/${design_name}_wrapper.bit ./${overlay_name}.bit
 
 # Create files for optional PetaLinux integration
+# Note: Due to issues with the sensors96b hardware design not being suitable for PetaLinux inclusion
+#       don't uncomment and use these unless you know what you are doing.
 file mkdir ./${overlay_name}/${overlay_name}.sdk
-file copy -force ./${overlay_name}/${overlay_name}.runs/impl_1/${design_name}_wrapper.sysdef ./${overlay_name}/${overlay_name}.sdk/${design_name}_wrapper.hdf
-file copy -force ./${overlay_name}/${overlay_name}.runs/impl_1/${design_name}_wrapper.bit ./${overlay_name}/${overlay_name}.sdk/${design_name}_wrapper.bit
+#file copy -force ./${overlay_name}/${overlay_name}.runs/impl_1/${design_name}_wrapper.sysdef ./${overlay_name}/${overlay_name}.sdk/${design_name}_wrapper.hdf
+#file copy -force ./${overlay_name}/${overlay_name}.runs/impl_1/${design_name}_wrapper.bit ./${overlay_name}/${overlay_name}.sdk/${design_name}_wrapper.bit
+# Until fixed return to original way:
+file copy -force ./${overlay_name}.hdf ./${overlay_name}/${overlay_name}.sdk/${overlay_name}.hdf
