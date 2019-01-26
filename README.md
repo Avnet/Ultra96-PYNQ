@@ -25,7 +25,7 @@ git clone https://github.com/Xilinx/PYNQ.git <LOCAL PYNQ>
 cd <LOCAL PYNQ>
 git checkout origin/image_v2.3
 ```
-**Configure and install build tools, this will take some effort and will be an iterative proces. You are on your own to install missing requested tools:**
+**Configure and install build tools, this will take some effort and will be an iterative process. You are on your own to install missing requested tools:**
 ```shell
 cd sdbuild
 make checkenv
