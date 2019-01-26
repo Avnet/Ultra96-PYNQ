@@ -84,7 +84,7 @@ petalinux-package --bsp -p sensors96b --hwsource ../../Ultra96/sensors96b/sensor
 cd <LOCAL PYNQ>/sdbuild
 make BOARDDIR=<LOCAL ULTRA96>
 ```
-**Once the build has completed (it will take a long long time), if successful an SD card image will be available under the PYNQ git directory here: ./sdbuld/output/Ultra96_v2.3.img**
+**Once the build has completed (it will take a long long time), if successful an SD card image will be available under the PYNQ git directory here: ./sdbuild/output/Ultra96_v2.3.img**
 \
 \
 **Use Etcher or Win32DiskImager to write this image to an SD card.  Insert card, PYNQ should boot up on the Ultra96!**
