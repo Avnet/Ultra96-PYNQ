@@ -1,4 +1,4 @@
-## Build PYNQ v2.3 for Ultra96 using a fresh (or your own) PetaLinux BSP:
+## Build PYNQ v2.3 for Ultra96:
 This repository contains source files and instructions for building PYNQ to run on the 
 [Ultra96 board](http://zedboard.org/product/ultra96).
 ## Quick Start
@@ -20,12 +20,12 @@ This repository contains source files and instructions for building PYNQ to run 
 ```shell
 git clone https://github.com/Xilinx/PYNQ.git <LOCAL PYNQ>
 ```
-**Setup PYNQ git to work on branch "image_v2.3":**
+**Setup PYNQ git to use detached branch "image_v2.3":**
 ```shell
 cd <LOCAL PYNQ>
 git checkout origin/image_v2.3
 ```
-**Configure and install build tools, this will take some effort and will be an iterative proces. Install on your own MISSING requested tools:**
+**Configure and install build tools, this will take some effort and will be an iterative proces. You are on your own to install missing requested tools:**
 ```shell
 cd sdbuild
 make checkenv
@@ -34,46 +34,17 @@ make checkenv
 ```shell
 git clone https://github.com/Avnet/Ultra96-PYNQ.git <LOCAL ULTRA96>
 ```
-## Note: If you already have a pre-made Ultra96 BSP that meets the requirements, you can skip creating one and skip to the next Note!
-
-**Obtain and install Xilinx Vivado or SDx and PetaLinux v2018.2 on Ubuntu 16.04 LTS. If you are installing the Xilinx tools for the first time on your existing setup you must read Xilinx UG1144 for PetaLinux setup requirements.  If you prefer, you can also setup all the tools on a VirtualBox VM.  Follow Avnet's VM and Xilinx tools install instructions here:** (http TBD)
-\
-\
-**Use the Xilinx SDx or Vivado tools to generate the hardware design.  The hardware design source files contain a PL (Xilinx Programmable Logic) design that will enable PYNQ to interact with a Grove or Click optional mezzanine board.  The hardware design also contains Ultra96 board specific settings.  After building the hardware design, it will be manually imported into the PetaLinux BSP to be used for PYNQ.  To build the hardware design that PetaLinux will boot up with:**
+**Setup Ultra96 PYNQ Board git to use detached branch "master":**
 ```shell
-cd <LOCAL ULTRA96>/Ultra96/sensors96b
-make
+cd <LOCAL PYNQ>
+git checkout origin/master
 ```
-**After the hardware design has completed building and you have installed PetaLinux 2018.2 then create the Ultra96 BSP by executing PetaLinux cmds FROM the TOP DIRECTORY of the Ultra96 PYNQ board git. You may see a couple warnings after the -config, those are normal:**
-```shell
-cd <LOCAL ULTRA96>
-mkdir bsp
-cd bsp
-petalinux-create -t project -n sensors96b --template zynqMP
-cd sensors96b
-petalinux-config --get-hw-description=../../Ultra96/sensors96b/sensors96b/sensors96b.sdk
+## Note: The best BSP to use at this time is xilinx-ultra96-reva-v2018.2-final.bsp  You may download it for free from a Xilinx developer account.
+**Place the  file in the Ultra96 PYNQ Board repo:**
 ```
-**After the system config menus appear you need to set the following case-sensitive values, after completion exit and save:**
-* Subsystem AUTO Hardware Settings → Serial Settings → Primary stdin/stdout → (psu_uart_1)
-* DTG Settings → MACHINE_NAME → (zcu100-revc)
-* u-boot Configuration → u-boot config target → (xilinx_zynqmp_zcu100_revC_defconfig)
-* Image Packaging Configuration → Root filesystem type → (SD card)
-* Yocto Settings → YOCTO_MACHINE_NAME → (ultra96-zynqmp)
-
-**OPTIONAL: configure u-boot to decrease the boot delay:**
-```shell
-petalinux-config -c u-boot
+cp  <From download location>/xilinx-ultra96-reva-v2018.2-final.bsp  <LOCAL ULTRA96>/Ultra96/
 ```
-*Optionally change "delay in seconds before automatically booting" default is 4 seconds then exit and save*\
-\
-**Finish creating the BSP by packaging it up into a single BSP file and placing it for PYNQ to find:**
-```shell
-cd <LOCAL ULTRA96>/bsp
-petalinux-package --bsp -p sensors96b --hwsource ../../Ultra96/sensors96b/sensors96b --output ../../Ultra96/sensors96b.bsp
-```
-## Note: If you already have a proper BSP for Ultra96, the file and project name must match what is in Ultra96.spec.  Change one or the other accordingly. Place your BSP in the Ultra96 dir under the top dir of the location of the Ultra96 PYNQ board git, proceed from here to complete the build.
-
-**Then in your PYNQ repository go to the directory "sdbuild" and run make:**\
+**Go back to your PYNQ repository and go to the directory "sdbuild", run make:**\
 **IMPORTANT: For the BOARDDIR path setting it should be absolute not relative, you have been warned!**
 ```shell
 cd <LOCAL PYNQ>/sdbuild
