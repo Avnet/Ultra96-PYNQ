@@ -1,4 +1,4 @@
-## Build PYNQ for Ultra96 using a fresh (or your own) PetaLinux BSP:
+## Build PYNQ v2.3 for Ultra96 using a fresh (or your own) PetaLinux BSP:
 This repository contains source files and instructions for building PYNQ to run on the 
 [Ultra96 board](http://zedboard.org/product/ultra96).
 ## Quick Start
@@ -41,10 +41,10 @@ git checkout origin/image_v2.3
 ```
 ## Note: If you already have a pre-made Ultra96 BSP that meets the requirements, you can skip creating one and skip to the next Note!
 
-**Obtain and install Xilinx Vivado or SDx and PetaLinux v2018.2 on Ubuntu 16.04 LTS. If you are installing the Xilinx tools for the first time on your existing setup you must read Xilinx UG1144 for PetaLinux setup requirements.  If you prefer, you can also setup all the tools on a VirtualBox VM.  Follow Avnet's VM and Xilinx tools install instructions here:** http://avnet.com/surl-to-instructions
+**Obtain and install Xilinx Vivado or SDx and PetaLinux v2018.2 on Ubuntu 16.04 LTS. If you are installing the Xilinx tools for the first time on your existing setup you must read Xilinx UG1144 for PetaLinux setup requirements.  If you prefer, you can also setup all the tools on a VirtualBox VM.  Follow Avnet's VM and Xilinx tools install instructions here:** (http TBD)
 \
 \
-**Use the Xilinx SDX or Vivado tools to generate the hardware design.  The hardware design source files contain a PL (Xilinx Programmable Logic) design that will enable PYNQ to interact with a Grove or Click optional mezzanine board.  The hardware design also contains Ultra96 board specific settings.  After building the hardware design, it will be manually imported into the PetaLinux BSP to be used for PYNQ.  To build the hardware design that PetaLinux will boot up with:**
+**Use the Xilinx SDx or Vivado tools to generate the hardware design.  The hardware design source files contain a PL (Xilinx Programmable Logic) design that will enable PYNQ to interact with a Grove or Click optional mezzanine board.  The hardware design also contains Ultra96 board specific settings.  After building the hardware design, it will be manually imported into the PetaLinux BSP to be used for PYNQ.  To build the hardware design that PetaLinux will boot up with:**
 ```shell
 cd <LOCAL ULTRA96>/Ultra96/sensors96b
 make
