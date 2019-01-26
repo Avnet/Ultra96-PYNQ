@@ -1,5 +1,4 @@
 /include/ "system-conf.dtsi"
-/include/ "openamp-overlay.dtsi"
 / {
 };
 
