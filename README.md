@@ -34,11 +34,6 @@ make checkenv
 ```shell
 git clone https://github.com/Avnet/Ultra96-PYNQ.git <LOCAL ULTRA96>
 ```
-**Setup Ultra96 PYNQ board repo to work with the "image_v2.3" branch:**
-```shell
-cd <LOCAL ULTRA96>
-git checkout origin/image_v2.3
-```
 ## Note: If you already have a pre-made Ultra96 BSP that meets the requirements, you can skip creating one and skip to the next Note!
 
 **Obtain and install Xilinx Vivado or SDx and PetaLinux v2018.2 on Ubuntu 16.04 LTS. If you are installing the Xilinx tools for the first time on your existing setup you must read Xilinx UG1144 for PetaLinux setup requirements.  If you prefer, you can also setup all the tools on a VirtualBox VM.  Follow Avnet's VM and Xilinx tools install instructions here:** (http TBD)
@@ -78,7 +73,7 @@ petalinux-package --bsp -p sensors96b --hwsource ../../Ultra96/sensors96b/sensor
 ```
 ## Note: If you already have a proper BSP for Ultra96, the file and project name must match what is in Ultra96.spec.  Change one or the other accordingly. Place your BSP in the Ultra96 dir under the top dir of the location of the Ultra96 PYNQ board git, proceed from here to complete the build.
 
-**Then in your PYNQ repository (branch: image_v2.3) go to the directory "sdbuild" and run make:**\
+**Then in your PYNQ repository go to the directory "sdbuild" and run make:**\
 **IMPORTANT: For the BOARDDIR path setting it should be absolute not relative, you have been warned!**
 ```shell
 cd <LOCAL PYNQ>/sdbuild
