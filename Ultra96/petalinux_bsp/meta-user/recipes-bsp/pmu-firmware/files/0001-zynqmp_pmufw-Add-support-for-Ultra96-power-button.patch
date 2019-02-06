@@ -1,0 +1,238 @@
+From b806f7cf57d43ed3c7477a370cfdf4418d3d4f71 Mon Sep 17 00:00:00 2001
+From: Jyotheeswar Reddy <jyothee@xilinx.com>
+Date: Mon, 22 Oct 2018 10:03:12 -0700
+Subject: [EMBEDDEDSW PATCH v2] zynqmp_pmufw: Add support for Ultra96 power
+ button
+
+Ultra96 has a power button controller LTC2950 which generates an active low
+interrupt on MIO26 whenever the power button is pressed.  Since PMU GPI
+(connected to MIO26) only supports positive edge triggered interrupts, it is
+not possible to reliably capture the power button press event. So, we choose
+to capture the button press event by polling for the GPI pin state at regular
+intervals. When a LOW state is detected on the pin, system shutdown process is
+initiated. As per the datasheet, LTC2950 generates an active low pulse of
+minimum 26ms duration. So, to ensure we capture the event reliably, a scheduler
+task that runs every 10ms is added to check for the pin state and initiate
+shutdown. This patch adds Ultra96 module which implements this functionality
+and is enabled by defining ENABLE_MOD_ULTRA96 flag. It depends on scheduler
+feature which needs to be enabled (ENABLE_SCHEDULER).
+
+If FSBL is not yet running, it means that MIO is not configured and
+the GPI1 MIO bits in IOModule always read zero. This could cause false
+triggers. Also PM module may not have the right IPI info. So skip
+pin monitoring until config object is loaded.
+
+Signed-off-by: Jyotheeswar Reddy <jyothee@xilinx.com>
+---
+ lib/sw_apps/zynqmp_pmufw/src/xpfw_mod_ultra96.c  | 136 +++++++++++++++++++++++
+ lib/sw_apps/zynqmp_pmufw/src/xpfw_mod_ultra96.h  |  36 ++++++
+ lib/sw_apps/zynqmp_pmufw/src/xpfw_user_startup.c |   2 +
+ 3 files changed, 174 insertions(+)
+ create mode 100644 lib/sw_apps/zynqmp_pmufw/src/xpfw_mod_ultra96.c
+ create mode 100644 lib/sw_apps/zynqmp_pmufw/src/xpfw_mod_ultra96.h
+
+diff --git a/lib/sw_apps/zynqmp_pmufw/src/xpfw_mod_ultra96.c b/lib/sw_apps/zynqmp_pmufw/src/xpfw_mod_ultra96.c
+new file mode 100644
+index 0000000..4fee0b1
+--- /dev/null
++++ b/lib/sw_apps/zynqmp_pmufw/src/xpfw_mod_ultra96.c
+@@ -0,0 +1,136 @@
++/******************************************************************************
++* Copyright (C) 2018 Xilinx, Inc.  All rights reserved.
++*
++* Permission is hereby granted, free of charge, to any person obtaining a copy
++* of this software and associated documentation files (the "Software"), to deal
++* in the Software without restriction, including without limitation the rights
++* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++* copies of the Software, and to permit persons to whom the Software is
++* furnished to do so, subject to the following conditions:
++*
++* The above copyright notice and this permission notice shall be included in
++* all copies or substantial portions of the Software.
++*
++* Use of the Software is limited solely to applications:
++* (a) running on a Xilinx device, or
++* (b) that interact with a Xilinx device through a bus or interconnect.
++*
++* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
++* XILINX  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
++* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
++* OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++* SOFTWARE.
++*
++* Except as contained in this notice, the name of the Xilinx shall not be used
++* in advertising or otherwise to promote the sale, use or other dealings in
++* this Software without prior written authorization from Xilinx.
++******************************************************************************/
++
++#include "xpfw_default.h"
++#include "xpfw_config.h"
++#include "xpfw_core.h"
++#include "xpfw_module.h"
++
++#include "xpfw_mod_ultra96.h"
++
++#ifdef ENABLE_MOD_ULTRA96
++
++#ifndef ENABLE_SCHEDULER
++#error "ERROR: Ultra96 module requires scheduler to be enabled! Define ENABLE_SCHEDULER"
++#endif
++
++
++#ifndef ENABLE_PM
++#error "ERROR: Ultra96 module requires PM module to be enabled! Define ENABLE_PM"
++#endif
++
++#include "pm_core.h"
++#include "pm_master.h"
++#include "pm_callbacks.h"
++#include "pm_config.h"
++#include "rpu.h"
++
++/*
++ * Define the interval at which the power button input is polled
++ * This period should be a minimum of 10ms and multiples thereof, as per the scheduler configuration
++ */
++#define ULTRA96_PWR_BTN_POLL_PERIOD_MS 10U
++
++const XPfw_Module_t *Ultra96ModPtr;
++
++static void Ultra96PowerButtonHandler(void)
++{
++	/*
++	 * Dont check for the pin state if PM config is not yet loaded
++	 * This also means that FSBL is not yet running, MIO is not configured and we dont have the IPI info
++	 */
++	if(!PmConfigObjectIsLoaded()) {
++		return;
++	}
++	/* Check if WAKE pin has gone LOW */
++	if((XPfw_Read32(PMU_IOMODULE_GPI1) & PMU_IOMODULE_GPI1_MIO_WAKE_0_MASK) == 0U) {
++
++		/* Do a second check on the pin to mitigate sub-microsecond glitches, if any */
++		if ((XPfw_Read32(PMU_IOMODULE_GPI1) & PMU_IOMODULE_GPI1_MIO_WAKE_0_MASK) != 0U) {
++			/* If the pin is still not low, dont initiate a power down. Just return. */
++			return;
++		}
++
++		/* Start Board Power Down Sequence. First Remove the pin polling task from scheduler
++		 * to prevent re-triggering when shutdown is in progress
++		 */
++		XPfw_CoreRemoveTask(Ultra96ModPtr, ULTRA96_PWR_BTN_POLL_PERIOD_MS, Ultra96PowerButtonHandler);
++
++		/* Initiate Shutdown for all masters in the system */
++		/* TODO: All the PM related calls below should be wrapped into a single API
++		 *       like PmIntiateSystemShutdown in PM Module and this module needs to call it.
++		 */
++		u32 rpu_mode = XPfw_Read32(RPU_RPU_GLBL_CNTL);
++		/* APU */
++		if (PM_MASTER_STATE_ACTIVE == PmMasterIsActive(&pmMasterApu_g)) {
++			PmInitSuspendCb(&pmMasterApu_g,
++					SUSPEND_REASON_SYS_SHUTDOWN, 1, 0, 0);
++		}
++		/* RPU Split Mode */
++		if (0U == (rpu_mode & RPU_RPU_GLBL_CNTL_SLSPLIT_MASK)) {
++			if (PM_MASTER_STATE_ACTIVE == PmMasterIsActive(&pmMasterRpu0_g)) {
++				PmInitSuspendCb(&pmMasterRpu0_g,
++						SUSPEND_REASON_SYS_SHUTDOWN, 1, 0, 0);
++			}
++			if (PM_MASTER_STATE_ACTIVE == PmMasterIsActive(&pmMasterRpu1_g)) {
++				PmInitSuspendCb(&pmMasterRpu1_g,
++						SUSPEND_REASON_SYS_SHUTDOWN, 1, 0, 0);
++			}
++		} else {
++		/* RPU Lockstep Mode */
++			if (PM_MASTER_STATE_ACTIVE == PmMasterIsActive(&pmMasterRpu_g)) {
++				PmInitSuspendCb(&pmMasterRpu_g,
++						SUSPEND_REASON_SYS_SHUTDOWN, 1, 0, 0);
++			}
++		}
++	}
++}
++
++
++static void Ultra96CfgInit(const XPfw_Module_t *ModPtr, const u32 *CfgData, u32 Len)
++{
++	s32 Status;
++
++	Status = XPfw_CoreScheduleTask(ModPtr, ULTRA96_PWR_BTN_POLL_PERIOD_MS, Ultra96PowerButtonHandler);
++	if (XST_FAILURE == Status) {
++		XPfw_Printf(DEBUG_ERROR,"Ultra96 (MOD-%d):Scheduling MIO Poll task failed.",
++				ModPtr->ModId);
++	}
++}
++
++
++void ModUltra96Init(void)
++{
++	Ultra96ModPtr = XPfw_CoreCreateMod();
++	(void)XPfw_CoreSetCfgHandler(Ultra96ModPtr,Ultra96CfgInit);
++}
++#else /* ENABLE_MOD_ULTRA96 */
++void ModUltra96Init(void) { }
++#endif /* ENABLE_MOD_ULTRA96 */
+diff --git a/lib/sw_apps/zynqmp_pmufw/src/xpfw_mod_ultra96.h b/lib/sw_apps/zynqmp_pmufw/src/xpfw_mod_ultra96.h
+new file mode 100644
+index 0000000..59e14aa
+--- /dev/null
++++ b/lib/sw_apps/zynqmp_pmufw/src/xpfw_mod_ultra96.h
+@@ -0,0 +1,36 @@
++/******************************************************************************
++* Copyright (C) 2018 Xilinx, Inc.  All rights reserved.
++*
++* Permission is hereby granted, free of charge, to any person obtaining a copy
++* of this software and associated documentation files (the "Software"), to deal
++* in the Software without restriction, including without limitation the rights
++* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++* copies of the Software, and to permit persons to whom the Software is
++* furnished to do so, subject to the following conditions:
++*
++* The above copyright notice and this permission notice shall be included in
++* all copies or substantial portions of the Software.
++*
++* Use of the Software is limited solely to applications:
++* (a) running on a Xilinx device, or
++* (b) that interact with a Xilinx device through a bus or interconnect.
++*
++* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
++* XILINX  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
++* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
++* OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++* SOFTWARE.
++*
++* Except as contained in this notice, the name of the Xilinx shall not be used
++* in advertising or otherwise to promote the sale, use or other dealings in
++* this Software without prior written authorization from Xilinx.
++******************************************************************************/
++
++#ifndef XPFW_MOD_ULTRA96_H_
++#define XPFW_MOD_ULTRA96_H_
++
++void ModUltra96Init(void);
++
++#endif /* XPFW_MOD_ULTRA96_H_ */
+diff --git a/lib/sw_apps/zynqmp_pmufw/src/xpfw_user_startup.c b/lib/sw_apps/zynqmp_pmufw/src/xpfw_user_startup.c
+index 81db858..d084f54 100644
+--- a/lib/sw_apps/zynqmp_pmufw/src/xpfw_user_startup.c
++++ b/lib/sw_apps/zynqmp_pmufw/src/xpfw_user_startup.c
+@@ -44,6 +44,7 @@
+ #include "xpfw_mod_sched.h"
+ #include "xpfw_mod_stl.h"
+ #include "xpfw_mod_wdt.h"
++#include "xpfw_mod_ultra96.h"
+ 
+ #if defined (XPAR_LPD_IS_CACHE_COHERENT) || defined (XPAR_FPD_IS_CACHE_COHERENT) || defined (XPAR_PL_IS_CACHE_COHERENT)
+ /*****************************************************************************
+@@ -82,4 +83,5 @@ void XPfw_UserStartUp(void)
+ 	ModDapInit();
+ 	ModLegacyInit();
+ 	ModWdtInit();
++	ModUltra96Init();
+ }
+-- 
+2.7.4
+
