@@ -816,7 +816,7 @@ proc create_root_design { parentCell } {
   set xlconcat_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 xlconcat_0 ]
   set_property -dict [ list \
    CONFIG.NUM_PORTS {1} \
- ] $xlconcat_0
+  ] $xlconcat_0
 
   # Create interface connections
   connect_bd_intf_net -intf_net ps8_0_axi_periph_M00_AXI [get_bd_intf_pins axi_uart16550_0/S_AXI] [get_bd_intf_pins ps8_0_axi_periph/M00_AXI]
@@ -826,15 +826,14 @@ proc create_root_design { parentCell } {
 
   # Create port connections
   connect_bd_net -net axi_uart16550_0_ip2intc_irpt [get_bd_pins axi_uart16550_0/ip2intc_irpt] [get_bd_pins xlconcat_0/In0]
+  connect_bd_net -net xlconcat_0_dout [get_bd_pins zynq_ultra_ps_e_0/pl_ps_irq0] [get_bd_pins xlconcat_0/dout]
   connect_bd_net -net UART0_ctsn [get_bd_ports UART0_ctsn] [get_bd_pins axi_uart16550_0/ctsn]
-  connect_bd_net -net axi_uart16550_0_ip2intc_irpt [get_bd_pins axi_uart16550_0/ip2intc_irpt] [get_bd_pins zynq_ultra_ps_e_0/pl_ps_irq0]
   connect_bd_net -net axi_uart16550_0_rtsn [get_bd_ports UART0_rtsn] [get_bd_pins axi_uart16550_0/rtsn]
   connect_bd_net -net axi_uart16550_0_sout [get_bd_ports UART0_txd] [get_bd_pins axi_uart16550_0/sout]
   connect_bd_net -net emio_uart0_ctsn_1 [get_bd_ports BT_ctsn] [get_bd_pins zynq_ultra_ps_e_0/emio_uart0_ctsn]
   connect_bd_net -net proc_sys_reset_0_interconnect_aresetn [get_bd_pins proc_sys_reset_0/interconnect_aresetn] [get_bd_pins ps8_0_axi_periph/ARESETN]
   connect_bd_net -net proc_sys_reset_0_peripheral_aresetn [get_bd_pins axi_uart16550_0/s_axi_aresetn] [get_bd_pins proc_sys_reset_0/peripheral_aresetn] [get_bd_pins ps8_0_axi_periph/M00_ARESETN] [get_bd_pins ps8_0_axi_periph/S00_ARESETN]
   connect_bd_net -net sin_1 [get_bd_ports UART0_rxd] [get_bd_pins axi_uart16550_0/sin]
-  connect_bd_net -net xlconcat_0_dout [get_bd_pins zynq_ultra_ps_e_0/pl_ps_irq0] [get_bd_pins xlconcat_0/dout]
   connect_bd_net -net zynq_ultra_ps_e_0_emio_uart0_rtsn [get_bd_ports BT_rtsn] [get_bd_pins zynq_ultra_ps_e_0/emio_uart0_rtsn]
   connect_bd_net -net zynq_ultra_ps_e_0_pl_clk0 [get_bd_pins axi_uart16550_0/s_axi_aclk] [get_bd_pins proc_sys_reset_0/slowest_sync_clk] [get_bd_pins ps8_0_axi_periph/ACLK] [get_bd_pins ps8_0_axi_periph/M00_ACLK] [get_bd_pins ps8_0_axi_periph/S00_ACLK] [get_bd_pins zynq_ultra_ps_e_0/maxihpm0_lpd_aclk] [get_bd_pins zynq_ultra_ps_e_0/pl_clk0]
   connect_bd_net -net zynq_ultra_ps_e_0_pl_resetn0 [get_bd_pins proc_sys_reset_0/ext_reset_in] [get_bd_pins zynq_ultra_ps_e_0/pl_resetn0]
@@ -847,7 +846,7 @@ proc create_root_design { parentCell } {
   current_bd_instance $oldCurInst
 
   # Create PFM attributes
-  set_property PFM_NAME {xilinx.com:xd:sensors96b:1.0} [get_files [current_bd_design].bd]
+  set_property PFM_NAME {xilinx.com:xd:sensors96b:2.0} [get_files [current_bd_design].bd]
 
 
   save_bd_design
@@ -876,7 +875,11 @@ write_hwdef -force  -file ./${overlay_name}.hdf
 file copy -force ./${overlay_name}/${overlay_name}.runs/impl_1/${design_name}_wrapper.bit ./${overlay_name}.bit
 
 # Create files for optional PetaLinux integration
+# Note: Due to issues with the sensors96b hardware design not being suitable for PetaLinux inclusion
+#       don't uncomment and use these unless you know what you are doing.
 file mkdir ./${overlay_name}/${overlay_name}.sdk
-file copy -force ./${overlay_name}/${overlay_name}.runs/impl_1/${design_name}_wrapper.sysdef ./${overlay_name}/${overlay_name}.sdk/${design_name}_wrapper.hdf
-file copy -force ./${overlay_name}/${overlay_name}.runs/impl_1/${design_name}_wrapper.bit ./${overlay_name}/${overlay_name}.sdk/${design_name}_wrapper.bit
+#file copy -force ./${overlay_name}/${overlay_name}.runs/impl_1/${design_name}_wrapper.sysdef ./${overlay_name}/${overlay_name}.sdk/${design_name}_wrapper.hdf
+#file copy -force ./${overlay_name}/${overlay_name}.runs/impl_1/${design_name}_wrapper.bit ./${overlay_name}/${overlay_name}.sdk/${design_name}_wrapper.bit
+# Until fixed return to original way:
+file copy -force ./${overlay_name}.hdf ./${overlay_name}/${overlay_name}.sdk/${overlay_name}.hdf
 
