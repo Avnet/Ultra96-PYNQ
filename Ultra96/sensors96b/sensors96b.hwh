@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Wed Feb  6 00:53:30 2019" VIVADOVERSION="2018.2">
+<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Wed Feb  6 02:00:05 2019" VIVADOVERSION="2018.2">
 
   <SYSTEMINFO ARCH="zynquplus" DEVICE="xczu3eg" NAME="sensors96b" PACKAGE="sbva484" SPEEDGRADE="-1"/>
 
