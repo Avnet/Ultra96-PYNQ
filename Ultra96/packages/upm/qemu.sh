@@ -5,11 +5,9 @@ set -e
 
 cd /root/upm_build
 
-wget https://github.com/intel-iot-devkit/upm/archive/v1.3.0.zip
-unzip -a v1.3.0.zip
-cd upm-1.3.0
-cp -rf /root/upm_build/v1.3.0.patch .
-patch -p1 < v1.3.0.patch
+wget https://github.com/intel-iot-devkit/upm/archive/v1.7.1.zip
+unzip -a v1.7.1.zip
+cd upm-1.7.1
 
 mkdir build
 cd build
