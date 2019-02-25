@@ -86,7 +86,7 @@ Assuming Ultra96-PYNQ has been cloned:
    cd <Ultra96-PYNQ>/Ultra96/sensors96b
    source ./sensors96b.tcl
 
-To build from the command line, open the Vivado 2018.2 Tcl Shell, and run the 
+To build from the command line, open the Vivado 2018.3 Tcl Shell, and run the 
 following:
 
 .. code-block:: console

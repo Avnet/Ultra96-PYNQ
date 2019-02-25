@@ -83,10 +83,10 @@ index a0afc68..a07b0ee 100644
              ls_gpio_pins = hikey_ls_gpio_pins;
              b->uart_dev[0].device_path = hikey_serialdev[0];
              b->uart_dev[1].device_path = hikey_serialdev[1];
-+        } else if (mraa_file_contains(DT_BASE "/model", "ZynqMP ZCU100")) {
++        } else if (mraa_file_contains(DT_BASE "/model", "Avnet Ultra96 Rev1")) {
 +            b->platform_name = PLATFORM_NAME_ZCU100;
 +            if (zcu100_update_ls_gpio_pins() == -1) {
-+                syslog(LOG_CRIT, "ZCU100: failed to find ZynqMP GPIO");
++                syslog(LOG_CRIT, "Ultra96: failed to find ZynqMP GPIO");
 +                free(b);
 +                return NULL;
 +            }
@@ -122,7 +122,7 @@ index 40eccf5..f834058 100644
          else if (mraa_file_contains("/proc/device-tree/model",
                                      "HiKey Development Board"))
              platform_type = MRAA_96BOARDS;
-+        else if (mraa_file_contains("/sys/firmware/devicetree/base/model", "ZynqMP ZCU100"))
++        else if (mraa_file_contains("/sys/firmware/devicetree/base/model", "Avnet Ultra96 Rev1"))
 +            platform_type = MRAA_96BOARDS;
          else if (mraa_file_contains("/proc/device-tree/model", "s900"))
              platform_type = MRAA_96BOARDS;
