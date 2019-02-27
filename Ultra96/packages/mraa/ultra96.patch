@@ -1,129 +1,71 @@
+From 773988fb0911c1397537c1f4599ebc038b4960ca Mon Sep 17 00:00:00 2001
+From: Sai Hari Chandana Kalluri <chandana.kalluri@xilinx.com>
+Date: Mon, 29 Oct 2018 15:24:31 -0700
+Subject: [PATCH] [PATCH] Ultra96: Add support for ultra96
+
+Add support for Ultra96 board: Ultra96 is an Arm-based, Xilinx Zynq
+UltraScale+ MPSoC development board based on the Linaro 96Boards
+Consumer Edition specification.
+
+Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+Signed-off-by: Peter Ryser <peter.ryser@xilinx.com>
+Signed-off-by: Manjukumar Matha <manjukumar.harthikote-matha@xilinx.com>
+Signed-off-by: Sai Hari Chandana Kalluri <chandana.kalluri@xilinx.com>
+Signed-off-by: Alex Tereschenko <alext.mkrs@gmail.com>
+---
+ src/arm/96boards.c | 11 ++++++-----
+ src/arm/arm.c      |  2 ++
+ 2 files changed, 8 insertions(+), 5 deletions(-)
+
 diff --git a/src/arm/96boards.c b/src/arm/96boards.c
-index a0afc68..a07b0ee 100644
+index c744f44..13f0c56 100644
 --- a/src/arm/96boards.c
 +++ b/src/arm/96boards.c
-@@ -29,6 +29,7 @@
- #include <stdarg.h>
- #include <stdlib.h>
- #include <string.h>
-+#include <glob.h>
- #include <sys/mman.h>
- 
- #include "arm/96boards.h"
-@@ -38,8 +39,12 @@
- 
- #define PLATFORM_NAME_DB410C "DB410C"
- #define PLATFORM_NAME_HIKEY "HIKEY"
-+#define PLATFORM_NAME_ZCU100 "ZCU100"
- #define PLATFORM_NAME_BBGUM "BBGUM"
- 
-+#define GPC1  "/sys/class/gpio/gpiochip"
-+#define GPC2  "/label"
-+
- int db410c_ls_gpio_pins[MRAA_96BOARDS_LS_GPIO_COUNT] = {
-     36, 12, 13, 69, 115, 4, 24, 25, 35, 34, 28, 33,
+@@ -64,7 +64,8 @@ int db410c_chardev_map[MRAA_96BOARDS_LS_GPIO_COUNT][2] = {
  };
-@@ -53,10 +58,55 @@ int hikey_ls_gpio_pins[MRAA_96BOARDS_LS_GPIO_COUNT] = {
  
- const char* hikey_serialdev[MRAA_96BOARDS_LS_UART_COUNT] = { "/dev/ttyAMA2", "/dev/ttyAMA3" };
+ const char* db410c_serialdev[MRAA_96BOARDS_LS_UART_COUNT] = { "/dev/ttyMSM0", "/dev/ttyMSM1" };
+-const char* db410c_led[MRAA_96BOARDS_LED_COUNT] = { "user1", "user2", "user3", "user4", "bt", "wlan" };
++const char* db410c_led[MRAA_96BOARDS_LED_COUNT] = { "user1", "user2", "user3",
++                                                    "user4", "bt", "wlan" };
  
-+/* 96 Boards GPIO 23 24 25 26 27 28 29 30 31 32 33 34
-+ * mapped to
-+ * PS  MIO Base + 36 37 39 40 44 45
-+ * PS EMIO Base + 78 79 80 81 82 83
-+ * (PS EMIO[0:5] corresponds to HD_GPIO_[6,13,7,14,8,15])
-+*/
-+int zcu100_ls_gpio_pins[MRAA_96BOARDS_LS_GPIO_COUNT] = { 36, 37, 39, 40, 44, 45, 78, 79, 80, 81, 82, 83 };
-+
-+const char* zcu100_serialdev[MRAA_96BOARDS_LS_UART_COUNT] = { "/dev/tty96B0", "/dev/tty96B1"};
-+
- int bbgum_ls_gpio_pins[MRAA_96BOARDS_LS_GPIO_COUNT] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 155, 154 };
+ // Dragonboard820c
+ int db820c_ls_gpio_pins[MRAA_96BOARDS_LS_GPIO_COUNT] = {
+@@ -99,9 +100,8 @@ int hikey960_chardev_map[MRAA_96BOARDS_LS_GPIO_COUNT][2] = {
+ const char* hikey960_serialdev[MRAA_96BOARDS_LS_UART_COUNT] = { "/dev/ttyAMA3", "/dev/ttyAMA6" };
  
- const char* bbgum_serialdev[MRAA_96BOARDS_LS_UART_COUNT] = { "/dev/ttyS3", "/dev/ttyS5" };
+ // Rock960
+-int rock960_ls_gpio_pins[MRAA_96BOARDS_LS_GPIO_COUNT] = { 
+-    1006, 1002, 1041, 1042, 1121, 1128, 1124, 1131, 1125, 1132, 1050, 1055 
+-};
++int rock960_ls_gpio_pins[MRAA_96BOARDS_LS_GPIO_COUNT] = { 1006, 1002, 1041, 1042, 1121, 1128,
++                                                          1124, 1131, 1125, 1132, 1050, 1055 };
  
-+static int
-+zcu100_find_gpio_base(void)
-+{
-+    glob_t results;
-+    char **p;
-+    int i, base;
-+
-+    base = -1;
-+    results.gl_pathc = 0;
-+    glob(GPC1 "*" GPC2, 0, NULL, &results);
-+
-+    p = results.gl_pathv;
-+    for(i=0; i < results.gl_pathc; i++) {
-+        if(mraa_file_contains(*p, "zynqmp_gpio")) {
-+	        base = strtol(*p+sizeof(GPC1)-1, NULL, 10);
-+	        break;
-+	    }
-+        p++;
-+    }
-+    globfree(&results);
-+    return base;
-+}
-+
-+static int
-+zcu100_update_ls_gpio_pins(void)
-+{
-+    int base, i;
-+
-+    base = zcu100_find_gpio_base();
-+    for(i=0; i < MRAA_96BOARDS_LS_GPIO_COUNT; i++)
-+        zcu100_ls_gpio_pins[i] += base;
-+
-+    return base;
-+}
-+
- void
- mraa_96boards_pininfo(mraa_board_t* board, int index, int sysfs_pin, char* fmt, ...)
- {
-@@ -104,6 +154,16 @@ mraa_96boards()
-             ls_gpio_pins = hikey_ls_gpio_pins;
-             b->uart_dev[0].device_path = hikey_serialdev[0];
-             b->uart_dev[1].device_path = hikey_serialdev[1];
-+        } else if (mraa_file_contains(DT_BASE "/model", "ZynqMP ZCU100")) {
-+            b->platform_name = PLATFORM_NAME_ZCU100;
-+            if (zcu100_update_ls_gpio_pins() == -1) {
-+                syslog(LOG_CRIT, "ZCU100: failed to find ZynqMP GPIO");
-+                free(b);
-+                return NULL;
-+            }
-+            ls_gpio_pins = zcu100_ls_gpio_pins;
-+            b->uart_dev[0].device_path = zcu100_serialdev[0];
-+            b->uart_dev[1].device_path = zcu100_serialdev[1];
-         } else if (mraa_file_contains(DT_BASE "/model", "s900")) {
-             b->platform_name = PLATFORM_NAME_BBGUM;
-             ls_gpio_pins = bbgum_ls_gpio_pins;
-@@ -117,7 +177,16 @@ mraa_96boards()
-     b->def_uart_dev = 0;
+ const char* rock960_serialdev[MRAA_96BOARDS_LS_UART_COUNT] = { "/dev/ttyS3", "/dev/ttyS4" };
  
-     // I2C
--    if (b->platform_name == PLATFORM_NAME_BBGUM) {
-+    if (b->platform_name == PLATFORM_NAME_ZCU100) {
-+      /*
-+       * ZCU100 has i2c mux on i2c1 which means that first bus is i2c-2
-+       * and second i2c-3
-+       */
-+      b->i2c_bus_count = MRAA_96BOARDS_LS_I2C_COUNT;
-+      b->def_i2c_bus = 0;
-+      b->i2c_bus[0].bus_id = 2;
-+      b->i2c_bus[1].bus_id = 3;
-+    } else if (b->platform_name == PLATFORM_NAME_BBGUM) {
-         b->i2c_bus_count = MRAA_96BOARDS_LS_I2C_COUNT;
-         b->def_i2c_bus = 0;
-         b->i2c_bus[0].bus_id = 1;
+@@ -304,7 +304,8 @@ mraa_96boards()
+             ls_gpio_pins = rock960_ls_gpio_pins;
+             b->uart_dev[0].device_path = (char*) rock960_serialdev[0];
+             b->uart_dev[1].device_path = (char*) rock960_serialdev[1];
+-        } else if (mraa_file_contains(DT_BASE "/model", "ZynqMP ZCU100 RevC")) {
++        } else if ((mraa_file_contains(DT_BASE "/model", "ZynqMP ZCU100 RevC")) ||
++                   (mraa_file_contains(DT_BASE "/model", "Avnet Ultra96 Rev1"))) {
+             b->platform_name = PLATFORM_NAME_ULTRA96;
+             chardev_map = &ultra96_chardev_map;
+             b->uart_dev[0].device_path = (char*) ultra96_serialdev[0];
 diff --git a/src/arm/arm.c b/src/arm/arm.c
-index 40eccf5..f834058 100644
+index 62d6b2e..46a6861 100644
 --- a/src/arm/arm.c
 +++ b/src/arm/arm.c
-@@ -90,6 +90,8 @@ mraa_arm_platform()
-         else if (mraa_file_contains("/proc/device-tree/model",
-                                     "HiKey Development Board"))
+@@ -100,6 +100,8 @@ mraa_arm_platform()
              platform_type = MRAA_96BOARDS;
-+        else if (mraa_file_contains("/sys/firmware/devicetree/base/model", "ZynqMP ZCU100"))
+         else if (mraa_file_contains("/proc/device-tree/model", "ZynqMP ZCU100 RevC"))
+             platform_type = MRAA_96BOARDS;
++        else if (mraa_file_contains("/proc/device-tree/model", "Avnet Ultra96 Rev1"))
 +            platform_type = MRAA_96BOARDS;
-         else if (mraa_file_contains("/proc/device-tree/model", "s900"))
-             platform_type = MRAA_96BOARDS;
          else if (mraa_file_contains("/proc/device-tree/compatible", "raspberrypi,"))
+             platform_type = MRAA_RASPBERRY_PI;
+     }
+-- 
+1.9.5
+

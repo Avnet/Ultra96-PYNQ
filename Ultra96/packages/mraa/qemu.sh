@@ -9,13 +9,13 @@ cd /usr/share/swig3.0
 wget https://git.yoctoproject.org/cgit.cgi/poky/plain/meta/recipes-devtools/swig/swig/0001-Add-Node-7.x-aka-V8-5.2-support.patch
 patch -p2 < "0001-Add-Node-7.x-aka-V8-5.2-support.patch"
 
-# patch for mraa 1.7.0
+# patch for mraa 2.0.0
 patch_file="/root/mraa_build/ultra96.patch"
 
 cd /root/mraa_build
-wget https://github.com/intel-iot-devkit/mraa/archive/v1.7.0.zip
-unzip -a v1.7.0.zip
-cd mraa-1.7.0
+wget https://github.com/intel-iot-devkit/mraa/archive/v2.0.0.zip
+unzip -a v2.0.0.zip
+cd mraa-2.0.0
 patch -p1 < $patch_file
 
 mkdir build
