@@ -1,3 +1,5 @@
+![alt tag](./pynq.png)
+![alt tag](./software.png)
 ## Build PYNQ v2.4 for Ultra96 using included 2018.3 PetaLinux BSP:
 This repository contains source files and instructions for building PYNQ to run on the 
 [Ultra96 board](http://zedboard.org/product/ultra96).
