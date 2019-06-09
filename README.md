@@ -21,13 +21,19 @@ This repository contains source files and instructions for building PYNQ to run 
 ```shell
 git clone https://github.com/Avnet/Ultra96-PYNQ.git [LOCAL ULTRA96]
 ```
-**Setup Ultra96-PYNQ git to work on branch "image_v2.4":**
+**Setup Ultra96-PYNQ git to work on branch "image_v2.4_v2":**
 ```shell
 cd <LOCAL ULTRA96>
-git checkout origin/image_v2.4
+git checkout origin/image_v2.4_v2
 ```
-## Note: A BSP for building PYNQ named sensors96b.bsp is already included in this repo.  If you would like to build your own see note at bottom.
+## Note: A BSP for building PYNQ for Ultra96 V1 and V2 are already included in this repo.  If you would like to build your own see note at bottom.
 
+**You must now choose the bsp for Ultra96 board V1 or V2.  Change the softlink to point to the desired board version spec file by replacing 'X' with '1' or '2'**
+```shell
+cd <LOCAL ULTRA96>/Ultra96
+ln -s ./spec/Ultra96_vX.spec ./Ultra96.spec
+ln -s ./petalinux_bsp_vX ./petalinux_bsp
+```
 **Retrieve the main PYNQ repo into a NEW directory somewhere outside the Ultra96-PYNQ directory:**
 ```shell
 git clone https://github.com/Xilinx/PYNQ.git [LOCAL PYNQ]
@@ -65,6 +71,9 @@ cd <LOCAL ULTRA96>/Ultra96/sensors96b
 make clean
 make
 ```
+### Note: the above will build a hardware design for Ultra96 V1 if you are using V2 use "make u96v2".
+
+### TBD: This is only for v1, need to add instructions for v2
 **After the hardware design has completed building and you have installed PetaLinux 2018.3 then create the Ultra96 BSP by executing PetaLinux cmds FROM the TOP DIRECTORY of the Ultra96 PYNQ board git. You may see a couple warnings after the -config, those are normal:**
 ```shell
 cd <LOCAL ULTRA96>
@@ -81,7 +90,7 @@ petalinux-config --get-hw-description=../../Ultra96/sensors96b/sensors96b/sensor
 * Image Packaging Configuration → Root filesystem type → (SD card)
 * Yocto Settings → YOCTO_MACHINE_NAME → (ultra96-zynqmp)
 
-**To work around a bug for Ultra96 you must edit <LOCAL ULTRA96>/bsp/sensors96b/project-spec/meta-user/conf/petalinuxbsp.conf**\
+**To work around a bug for Ultra96 that prevents including your own hardware design you must edit <LOCAL ULTRA96>/bsp/sensors96b/project-spec/meta-user/conf/petalinuxbsp.conf**\
 Add the following line at the bottom of the file:  MACHINE_FEATURES_remove_ultra96-zynqmp = "mipi"\
 \
 **OPTIONAL: configure u-boot to decrease the boot delay:**
@@ -90,6 +99,10 @@ petalinux-config -c u-boot
 ```
 *Optionally change "delay in seconds before automatically booting", default is 4 seconds then exit and save*\
 \
+**OPTIONAL: For V2 you may want to remove the TI WiFi driver. Search through device drivers, networking, wireless and deselect the Texas Insrument drivers:**
+```shell
+petalinux-config -c kernel
+```
 **Finish creating the BSP by packaging it up into a single BSP file and placing it for PYNQ to find:**
 ```shell
 cd <LOCAL ULTRA96>/bsp
