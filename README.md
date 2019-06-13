@@ -1,6 +1,7 @@
 ![alt tag](./ultra96-pynq.png)\
+![alt tag](./ultra96_v2-pynq.png)
 ![alt tag](./software.png)
-## Build PYNQ v2.4 for Ultra96 using included 2018.3 PetaLinux BSP:
+## Build PYNQ v2.4 for Ultra96 for V1 or V2 using included 2018.3 PetaLinux BSP:
 This repository contains source files and instructions for building PYNQ to run on the 
 [Ultra96 board](http://zedboard.org/product/ultra96).
 ## Quick Start
@@ -69,12 +70,11 @@ make BOARDDIR=<LOCAL ULTRA96>
 ```shell
 cd <LOCAL ULTRA96>/Ultra96/sensors96b
 make clean
-make
+make u96v2
 ```
-### Note: the above will build a hardware design for Ultra96 V1 if you are using V2 use "make u96v2".
+### Note: the above will build a hardware design for Ultra96 V2 if you are using V1 just use "make".
 
-### TBD: This is only for v1, need to add instructions for v2
-**After the hardware design has completed building and you have installed PetaLinux 2018.3 then create the Ultra96 BSP by executing PetaLinux cmds FROM the TOP DIRECTORY of the Ultra96 PYNQ board git. You may see a couple warnings after the -config, those are normal:**
+**After the hardware design has finished building and you have installed PetaLinux 2018.3 then create the Ultra96 BSP by executing PetaLinux cmds FROM the TOP DIRECTORY of the Ultra96 PYNQ board git. You may see a couple warnings after the -config, those are normal:**
 ```shell
 cd <LOCAL ULTRA96>
 mkdir bsp
@@ -103,9 +103,11 @@ petalinux-config -c u-boot
 ```shell
 petalinux-config -c kernel
 ```
-**Finish creating the BSP by packaging it up into a single BSP file and placing it for PYNQ to find:**
+**Finish creating the BSP by packaging it up into a single BSP file and placing it for PYNQ to find. 'X' should be set to '1' or '2' for U96 v1 or v2:**
 ```shell
 cd <LOCAL ULTRA96>/bsp
-rm ../Ultra96/sensors96b.bsp
-petalinux-package --bsp -p sensors96b --hwsource ../Ultra96/sensors96b/sensors96b --output ../Ultra96/sensors96b.bsp
+rm ../Ultra96/sensors96b_vX.bsp
+petalinux-package --bsp -p sensors96b --hwsource ../Ultra96/sensors96b/sensors96b --output ../Ultra96/sensors96b_vX.bsp
 ```
+
+**Note: The Microchip wilc driver has been pre-built and resides in the pre-stage PYNQ package area (wilc3000).  To rebuild the wilc_sdio.ko driver you will need to wait for a PYNQ build to finish, then go back under the ./sdbuild/build location and find the base directory of the PYNQ built BSP and manualy run 'petalinux-build -c rootfs'.  This will build the device driver with the correct Linux kernel #defines.  After the rootfs has built you will need to find wilc_sdio.ko and manually copy it over to the U96 PYNQ rootfs and/or update the package file version of it under wilc3000**
