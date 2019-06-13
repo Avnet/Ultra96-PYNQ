@@ -21,3 +21,9 @@ rm -rf wilc_bld
 # Start module on bootup
 echo "wilc-sdio" >> /etc/modules
 
+# Wilc cannot do wlan1 only wlan0 and p2p0, so fix that for host ap
+echo "INTERFACES=\"usb0 p2p0\"" > /etc/default/isc-dhcp-server
+cp /usr/local/share/wpa_ap/ap.sh /usr/local/share/wpa_ap/ap_v1.sh
+cp /usr/local/share/wpa_ap/ap_v2.sh /usr/local/share/wpa_ap/ap.sh
+chmod a+x /usr/local/share/wpa_ap/ap.sh
+
