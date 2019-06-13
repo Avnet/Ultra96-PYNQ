@@ -6,8 +6,16 @@ all: bitstream check_timing dsa
 	@tput setaf 2 ; echo "Built $(overlay_name) successfully!"; tput sgr0;
 	@echo
 
+u96v2: bitstream2 check_timing dsa
+	@echo
+	@tput setaf 2 ; echo "Built $(overlay_name) successfully!"; tput sgr0;
+	@echo
+
 bitstream:
 	vivado -mode batch -source $(overlay_name).tcl -notrace
+
+bitstream2:
+	vivado -mode batch -source $(overlay_name)_v2.tcl -notrace
 
 check_timing:
 	vivado -mode batch -source check_$(overlay_name).tcl -notrace
@@ -20,3 +28,4 @@ dsa:
 clean:
 	rm -rf $(overlay_name) *.jou *.log
 	rm -rf .dsa
+	rm $(overlay_name).bit $(overlay_name).hwh $(overlay_name).hdf $(overlay_name).dsa

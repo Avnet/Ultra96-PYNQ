@@ -1,0 +1,86 @@
+/include/ "system-conf.dtsi"
+/ {
+        // This is already in U96 V1 DT except for on delay, so we'll merge it in
+        sdio_pwrseq: sdio_pwrseq {
+                compatible = "mmc-pwrseq-simple";
+                /*post-power-on-delay-ms = <10>;*/
+                reset-gpios = <&gpio 7 1>; /* MIO[7] RESETN for WILC3000 active low */
+                /* reset-gpios = <&gpio 78 1>;  // device pin A3 for RESETN, Active low, JT5 strapped to pins 1-2 */
+                chip_en-gpios = <&gpio 8 1>;  // This REQUIRES a patched pwrseq_simple.c to have it use this pin properly for the WILC3000 wifi part
+        };
+
+        // Remove V1 Power ON/OFF controller from U96 V1 DT
+        /delete-node/ ltc2954;
+};
+
+&uart0 {
+        // Remove TI child node from U96 V1 DT
+        /delete-node/bluetooth;
+};
+
+&gpio {
+        /delete-property/gpio-line-names;
+};
+
+// This is what is in sdhci1 DT from V1, it will merge with below:
+//
+//        bus-width = <0x4>;
+//        non-removable;
+//        disable-wp;
+//        cap-power-off-card;
+//        mmc-pwrseq = <&sdio_pwrseq>;
+//        vqmmc-supply = <&wmmcsdio_fixed>;
+//        #address-cells = <1>;
+//        #size-cells = <0>;
+//        wlcore: wifi@2 {
+//                compatible = "ti,wl1831";
+//                reg = <2>;
+//                interrupt-parent = <&gpio>;
+//                interrupts = <76 1>; /* MIO76 WLAN_IRQ 1V8 */
+//        };
+//
+&sdhci1 {
+        max-frequency = <50000000>;
+        /delete-property/cap-power-off-card;  // This is not compatible with the WILC3000 and means the WILC will always be powered on
+        wilc_sdio@1 {
+                compatible = "microchip,wilc3000", "microchip,wilc3000";
+                reg = <0>;
+                // interrupt-parent = <&gpio>;                    // WILC driver does NOT use gpio IRQ
+                // interrupts = <76 2>; /* MIO76 WILC IRQ 1V8 */  // WILC driver does NOT use gpio IRQ
+                // irq-gpios = <&gpio 76 0>;                      // WILC driver does NOT use gpio IRQ
+                bus-width = <0x4>;
+                status = "okay";
+        };
+        // Remove TI child node from U96 V1 DT
+        /delete-node/wifi@2;
+};
+
+&spi0 {
+        is-decoded-cs = <0>;
+        num-cs = <1>;
+        status = "okay";
+        spidev@0x00 {
+                compatible = "rohm,dh2228fv";
+                spi-max-frequency = <1000000>;
+                reg = <0>;
+        };
+};
+
+&spi1 {
+        is-decoded-cs = <0>;
+        num-cs = <1>;
+        status = "okay";
+        spidev@0x00 {
+                compatible = "rohm,dh2228fv";
+                spi-max-frequency = <1000000>;
+                reg = <0>;
+        };
+};
+
+/////////////////////////////////////////////////////////////////////////////////
+//
+// NOTE: This content is redundant (a duplicate of what is in the PetaLinux bsp)
+// because the PYNQ build process over-writes the system-user.dtsi that
+// is in the meta-user layer of a PetaLinux bsp
+//
+/////////////////////////////////////////////////////////////////////////////////
