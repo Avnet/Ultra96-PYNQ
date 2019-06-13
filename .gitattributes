@@ -35,3 +35,5 @@
 *.dsa binary -crlf
 *.a binary -crlf
 *.ko binary
+*.bit.v1 binary -crlf
+*.bit.v2 binary -crlf
