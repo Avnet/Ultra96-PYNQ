@@ -29,12 +29,17 @@ git checkout origin/image_v2.4_v2
 ```
 ## Note: A BSP for building PYNQ for Ultra96 V1 and V2 are already included in this repo.  If you would like to build your own see note at bottom.
 
-**You must now choose the bsp for Ultra96 board V1 or V2.  Change the softlink to point to the desired board version spec file by replacing 'X' with '1' or '2'**
+**You must now choose Ultra96 board V1 or V2.  Change the softlink to point to the desired board version spec file by replacing 'X' with '1' or '2'**
+
 ```shell
 cd <LOCAL ULTRA96>/Ultra96
-ln -s ./spec/Ultra96_vX.spec ./Ultra96.spec
-ln -s ./petalinux_bsp_vX ./petalinux_bsp
+ln -s specs/Ultra96_vX.spec Ultra96.spec
+ln -s petalinux_bsp_vX petalinux_bsp
+cp -f sensors96b/sensors96b.bit.vX sensors96b/sensors96b.bit
+cp -f sensors96b/sensors96b.tcl.vX sensors96b/sensors96b.tcl
+cp -f sensors96b/sensors96b.hwh.vX sensors96b/sensors96b.hwh
 ```
+
 **Retrieve the main PYNQ repo into a NEW directory somewhere outside the Ultra96-PYNQ directory:**
 ```shell
 git clone https://github.com/Xilinx/PYNQ.git [LOCAL PYNQ]
@@ -67,12 +72,12 @@ make BOARDDIR=<LOCAL ULTRA96>
 **Obtain and install Xilinx Vivado or SDx and PetaLinux v2018.3 on Ubuntu 16.04 LTS. If you are installing the Xilinx tools for the first time on your existing setup you must read Xilinx UG1144 for PetaLinux setup requirements.  If you prefer, you can also setup all the tools on a VirtualBox VM.  Follow Avnet's VM and Xilinx tools install instructions here: (http: TBD) If you purchase an Ultra96 board, a free voucher for the full-version Xilinx SDX tool suite and PetaLinux 2018.3 is included**
 
 **Use the Xilinx SDx or Vivado tools to generate the hardware design.  The hardware design source files contain a PL (Xilinx Programmable Logic) design that will enable PYNQ to interact with a Grove mezzanine board.  The hardware design also contains Ultra96 board specific settings.  After building the hardware design, it will be manually imported into the PetaLinux BSP to be used for PYNQ.  To build the hardware design that PetaLinux will boot up with:**
+
 ```shell
 cd <LOCAL ULTRA96>/Ultra96/sensors96b
-make clean
-make u96v2
+cp -f sensors96b.tcl.vX sensors96b.tcl
+make
 ```
-### Note: the above will build a hardware design for Ultra96 V2 if you are using V1 just use "make".
 
 **After the hardware design has finished building and you have installed PetaLinux 2018.3 then create the Ultra96 BSP by executing PetaLinux cmds FROM the TOP DIRECTORY of the Ultra96 PYNQ board git. You may see a couple warnings after the -config, those are normal:**
 ```shell
