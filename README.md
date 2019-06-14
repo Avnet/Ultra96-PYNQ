@@ -131,7 +131,7 @@ petalinux-config -c u-boot
 
 Optionally change "delay in seconds before automatically booting", default is 4 seconds then exit and save.
 
-For V2 you may want to remove the TI WiFi driver. Search through device drivers, networking, wireless and deselect the Texas Insrument drivers:
+For V2 you may want to remove the TI WiFi driver module. Search through device drivers, networking, wireless and deselect the Texas Instrument drivers:
 ```shell
 petalinux-config -c kernel
 ```
