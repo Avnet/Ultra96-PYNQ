@@ -144,7 +144,7 @@ rm ../Ultra96/sensors96b_vX.bsp
 petalinux-package --bsp -p sensors96b --hwsource ../Ultra96/sensors96b/sensors96b --output ../Ultra96/sensors96b_vX.bsp
 ```
 
-Note: The Microchip wilc driver used for U96 V2 has been pre-built and resides in the pre-stage PYNQ package area (wilc3000). To rebuild the `wilc_sdio.ko` driver you will need to wait for a PYNQ build to finish, then go back under the `./sdbuild/build` location and find the base directory of the PYNQ built BSP and manualy run 
+Note: The Microchip wilc driver used for U96 V2 has been pre-built and resides in the pre-stage PYNQ package area (wilc3000). To rebuild the `wilc_sdio.ko` driver you will need to wait for a PYNQ build to finish, then go back under the `./sdbuild/build` location and find the base directory of the PYNQ built BSP and manually run 
 
 ```shell
 petalinux-build -c rootfs
