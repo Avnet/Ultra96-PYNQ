@@ -36,4 +36,4 @@
 *.a binary -crlf
 *.ko binary
 *.bit.v1 binary -crlf
-*.bin.v2 binary -crlf
+*.bit.v2 binary -crlf
