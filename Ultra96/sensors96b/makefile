@@ -20,3 +20,4 @@ dsa:
 clean:
 	rm -rf $(overlay_name) *.jou *.log
 	rm -rf .dsa
+	rm -rf $(overlay_name).hdf $(overlay_name).dsa
