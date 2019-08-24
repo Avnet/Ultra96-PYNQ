@@ -46,7 +46,6 @@ You must now choose Ultra96 board V1 or V2.  Change the softlink to point to the
 ```shell
 cd <LOCAL ULTRA96>/Ultra96
 ln -s specs/Ultra96_vX.spec Ultra96.spec
-ln -s petalinux_bsp_vX petalinux_bsp
 cp -f sensors96b/sensors96b.bit.vX sensors96b/sensors96b.bit
 cp -f sensors96b/sensors96b.tcl.vX sensors96b/sensors96b.tcl
 cp -f sensors96b/sensors96b.hwh.vX sensors96b/sensors96b.hwh
