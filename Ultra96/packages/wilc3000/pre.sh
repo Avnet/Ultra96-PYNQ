@@ -7,5 +7,7 @@ sudo cp $script_dir/wpa_ap.service $target/lib/systemd/system
 sudo cp -r $script_dir/wpa_ap $target/usr/local/share/
 sudo mkdir $target/wilc_bld
 sudo mkdir -p $target/lib/firmware/mchp
-sudo mkdir -p $target/lib/modules/4.14.0-xilinx-v2018.3/extra
-sudo cp $script_dir/wilc-sdio.ko $target/lib/modules/4.14.0-xilinx-v2018.3/extra/
+cd $BUILD_ROOT/${PYNQ_BOARD}/petalinux_project
+petalinux-build -c wilc
+sudo mkdir -p $target/lib/modules/4.19.0-xilinx-v2019.1/extra
+sudo cp -rf build/tmp/sysroots-components/*/wilc/lib/modules/4.19.0-xilinx-v2019.1/extra/wilc-sdio.ko $target/lib/modules/4.19.0-xilinx-v2019.1/extra/

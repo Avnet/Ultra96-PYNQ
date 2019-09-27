@@ -67,10 +67,11 @@ cd <LOCAL PYNQ>
 git checkout origin/image_v2.5
 ```
 
-Configure and install build tools, this will take some effort and will be an iterative process. Install on your own any missing tools.
+Configure and install build tools, this will take some effort and will be an iterative process. Run `setup_host.sh` to install missing tools, `make checkenv` to check if all tools are installed.
 
 ```shell
 cd sdbuild
+./scripts/setup_host.sh
 make checkenv
 ```
 
@@ -166,20 +167,4 @@ rm ../Ultra96/sensors96b_vX.bsp
 petalinux-package --bsp -p sensors96b --hwsource ../Ultra96/sensors96b/sensors96b --output ../Ultra96/sensors96b_vX.bsp
 ```
 
-Note: The Microchip wilc driver used for U96 V2 has been pre-built and resides 
-in the pre-stage PYNQ package area (wilc3000). To rebuild the `wilc-sdio.ko` 
-driver you will need to wait for a PYNQ build to finish, then go back under 
-the `<LOCAL PYNQ>/sdbuild/build/Ultra96/petalinux_bsp/sensors96b` the base 
-directory of the PYNQ built BSP and manually run:
-
-```shell
-petalinux-build -c rootfs
-```
-
-This will build the device driver with the correct Linux kernel `#defines`.
-After the rootfs has finished building, you will need to locate the file 
-`wilc-sdio.ko`, manually copy it over to the U96 PYNQ rootfs, update 
-the git file version of it under the 
-`<LOCAL ULTRA96>/Ultra96/packages/wilc3000`
-folder, and then rebuild the SD image. The new image will then contain and 
-startup the Microchip wifi driver.
+Note: The PYNQ packages scripts and extra files will pull in v2 critical changes such as the wifi driver.
