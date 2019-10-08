@@ -5,9 +5,9 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-3.0;md5=c79ff39f19dfec6d293
 
 inherit module
 
-SRC_URI =  "git://github.com/Avnet/u96v2-wilc-driver;protocol=http;branch=master"
+SRC_URI =  "git://github.com/Avnet/u96v2-wilc-driver;protocol=http;branch=v15_2"
 
-SRCREV = "master"
+SRCREV = "01ab7484e0e6b2191c69d7ec7c6e89da5ca51f0f"
 
 DEPENDS += "virtual/kernel"
 
@@ -20,4 +20,3 @@ EXTRA_OEMAKE = 'CONFIG_WILC=y \
 		CONFIG_WILC1000_HW_OOB_INTR=n \
 		KERNEL_SRC="${STAGING_KERNEL_DIR}" \
 		O=${STAGING_KERNEL_BUILDDIR}'
-
