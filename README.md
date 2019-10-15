@@ -2,7 +2,10 @@
 ![alt tag](./ultra96_v2-pynq.png)
 ![alt tag](./software.png)
 
-## Build PYNQ SD Image for Ultra96 V1/V2
+## Grab the pre-built SD images!
+Click the releases tab above for instructions and the images for Ultra96 v1 or v2
+
+## Build PYNQ SD Image for Ultra96 V1/V2 (optional for advanced users)
 
 This repository contains source files and instructions for building PYNQ to run on the 
 [Ultra96 board](http://zedboard.org/product/ultra96). Users can leverage the included
