@@ -6,7 +6,7 @@
 
 This repository contains source files and instructions for building PYNQ to run on the 
 [Ultra96 board](http://zedboard.org/product/ultra96). Users can leverage the included
-Petalinux 2018.3 BSPs to build the images on their own.
+Petalinux BSPs to build the images on their own.
 
 ## Quick Start
 
@@ -19,8 +19,10 @@ Building PYNQ for Ultra96 can take many hours to complete.  Plan accordingly!
 * Roughly 60GB of free hard drive space if you have the Xilinx tools installed
 * You may be able to get away with less free hard drive space, YMMV
 * At least 8GB of RAM (more is better)
-* Xilinx PetaLinux 2018.3, read Xilinx UG1144 for PetaLinux setup requirements
-* A free Xilinx developer account to obtain and license the tools: https://www.xilinx.com/registration/create-account.html
+* Xilinx PetaLinux (find the version compatible to a specific PYNQ release at
+[Xilinx Tool Version](https://pynq.readthedocs.io/en/latest/pynq_sd_card.html));
+read Xilinx UG1144 for PetaLinux setup requirements
+* [Create a Xilinx account](https://www.xilinx.com/registration/create-account.html) to obtain and license the tools.
 
 Retrieve the Ultra96 PYNQ board git into a NEW directory somewhere outside the PYNQ git directory.
 
@@ -28,11 +30,11 @@ Retrieve the Ultra96 PYNQ board git into a NEW directory somewhere outside the P
 git clone https://github.com/Avnet/Ultra96-PYNQ.git <LOCAL ULTRA96>
 ```
 
-Setup Ultra96-PYNQ git to work on branch `image_v2.4_v2`.
+Setup Ultra96-PYNQ git to work on a branch (for example,`image_v2.5`).
 
 ```shell
 cd <LOCAL ULTRA96>
-git checkout origin/image_v2.4_v2
+git checkout origin/image_v2.5
 ```
 
 ## Using Included BSPs
@@ -52,23 +54,27 @@ cp -f sensors96b/sensors96b.hwh.vX sensors96b/sensors96b.hwh
 ```
 
 Retrieve the main PYNQ repo into a NEW directory somewhere outside the Ultra96-PYNQ directory.
+
 ```shell
 git clone https://github.com/Xilinx/PYNQ.git <LOCAL PYNQ>
 ```
 
-Setup PYNQ git to work on branch `image_v2.4`.
+Setup PYNQ git to work on a branch (for example, `image_v2.5`).
+
 ```shell
 cd <LOCAL PYNQ>
-git checkout origin/image_v2.4
+git checkout origin/image_v2.5
 ```
 
-Configure and install build tools, this will take some effort and will be an iterative process. Install on your own any missing tools.
+Configure and install build tools, this will take some effort and will be an iterative process. Run `setup_host.sh` to install missing tools, `make checkenv` to check if all tools are installed.
+
 ```shell
 cd sdbuild
+./scripts/setup_host.sh
 make checkenv
 ```
 
-In your PYNQ repository go to the directory "sdbuild" and run make.
+In your PYNQ repository go to the directory `sdbuild` and run make.
 
 **IMPORTANT: For the BOARDDIR path setting it should be absolute not relative, you have been warned!**
 
@@ -77,7 +83,9 @@ make clean
 make BOARDDIR=<LOCAL ULTRA96>
 ```
 
-Once the build has completed (it will take a long long time), if successful an SD card image will be available under the PYNQ git directory here: `./sdbuild/output/Ultra96_v2.4.img`.
+Once the build has completed (it will take a long long time), if successful an SD card image will be available under the PYNQ git directory `sdbuild/output`.
+Depending on the PYNQ release, the image may have different names; 
+as an example, for PYNQ v2.5, the image is `Ultra96-2.5.img`.
 
 Use Etcher or Win32DiskImager to write this image to an SD card. 
 Insert card, PYNQ should boot up on the Ultra96!
@@ -89,10 +97,25 @@ to the [online documentation](https://ultra96-pynq.readthedocs.io/en/latest/).
 
 Note this is optional; it is needed only if you have good reason not to use the included BSP.
 
-Obtain and install Xilinx Vivado or SDx and PetaLinux v2018.3 on Ubuntu 16.04 LTS. If you are installing the Xilinx tools for the first time on your existing setup you must read Xilinx UG1144 for PetaLinux setup requirements.  If you prefer, you can also setup all the tools on a VirtualBox VM (e.g. using [Vagrant software](https://pynq.readthedocs.io/en/latest/pynq_sd_card.html#prepare-the-building-environment)).
-If you purchase an Ultra96 board, a free voucher for the full-version Xilinx SDX tool suite and PetaLinux 2018.3 is included.
+Obtain and install Xilinx Vivado or SDx and PetaLinux on Ubuntu 16.04 
+LTS. For Xilinx tools, you will need a version compatible to the PYNQ release
+(for Xilinx tool compatibility, please find information at 
+[Xilinx Tool Version](https://pynq.readthedocs.io/en/latest/pynq_sd_card.html).
+If you are installing the Xilinx tools for the first time on your 
+existing setup you must read Xilinx UG1144 for PetaLinux setup requirements.
 
-Use the Xilinx SDx or Vivado tools to generate the hardware design.  The hardware design source files contain a PL (Xilinx Programmable Logic) design that will enable PYNQ to interact with a Grove mezzanine board.  The hardware design also contains Ultra96 board specific settings.  After building the hardware design, it will be manually imported into the PetaLinux BSP to be used for PYNQ.  To build the hardware design that PetaLinux will boot up with:
+If you prefer, you can also setup all the tools on a VirtualBox VM 
+(e.g. using [Vagrant software](https://pynq.readthedocs.io/en/latest/pynq_sd_card.html#prepare-the-building-environment)).
+If you purchase an Ultra96 board, a free voucher for the full-version Xilinx 
+SDX tool suite and PetaLinux is included.
+
+Use the Xilinx SDx or Vivado tools to generate the hardware design.
+The hardware design source files contain a PL (Xilinx Programmable Logic) 
+design that will enable PYNQ to interact with a Grove mezzanine board.
+The hardware design also contains Ultra96 board specific settings.
+After building the hardware design, it will be manually imported into the 
+PetaLinux BSP to be used for PYNQ. To build the hardware design that 
+PetaLinux will boot up with:
 
 ```shell
 cd <LOCAL ULTRA96>/Ultra96/sensors96b
@@ -100,14 +123,18 @@ cp -f sensors96b.tcl.vX sensors96b.tcl
 make
 ```
 
-After the hardware design has finished building and you have installed PetaLinux 2018.3 then create the Ultra96 BSP by executing PetaLinux cmds FROM the TOP DIRECTORY of the Ultra96 PYNQ board git. You may see a couple warnings after the -config, those are normal:
+After the hardware design has finished building and you have installed 
+PetaLinux then create the Ultra96 BSP by executing PetaLinux commands from the 
+ROOT DIRECTORY of the Ultra96 PYNQ board git. You may see a couple warnings 
+after the -config, those are normal:
+
 ```shell
 cd <LOCAL ULTRA96>
 mkdir bsp
 cd bsp
 petalinux-create -t project -n sensors96b --template zynqMP
 cd sensors96b
-petalinux-config --get-hw-description=../../Ultra96/sensors96b/sensors96b/sensors96b.sdk
+petalinux-config --get-hw-description=../../Ultra96/sensors96b
 ```
 
 After the system config menus appear you need to set the following case-sensitive values, after completion exit and save:
@@ -117,25 +144,21 @@ After the system config menus appear you need to set the following case-sensitiv
 * Image Packaging Configuration → Root filesystem type → (SD card)
 * Yocto Settings → YOCTO_MACHINE_NAME → (ultra96-zynqmp)
 
-To work around a bug for Ultra96 that prevents including your own hardware design you must edit `<LOCAL ULTRA96>/bsp/sensors96b/project-spec/meta-user/conf/petalinuxbsp.conf`.
-Add the following line at the bottom of the file:  
+To work around a bug for Ultra96 that prevents including your own hardware 
+design you must edit `<LOCAL ULTRA96>/bsp/sensors96b/project-spec/meta-user/conf/petalinuxbsp.conf`.
+Add the following line at the bottom of the file: 
 ```
 MACHINE_FEATURES_remove_ultra96-zynqmp = "mipi"
 ```
 
-OPTIONAL: configure u-boot to decrease the boot delay.
-```shell
-petalinux-config -c u-boot
-```
-
-Optionally change "delay in seconds before automatically booting", default is 4 seconds then exit and save.
-
-For V2 you may want to remove the TI WiFi driver module. Search through device drivers, networking, wireless and deselect the Texas Instrument drivers:
+For V2 you may want to remove the TI WiFi driver module. Search through 
+device drivers, networking, wireless and deselect the Texas Instrument drivers:
 ```shell
 petalinux-config -c kernel
 ```
 
-Finish creating the BSP by packaging it up into a single BSP file and placing it for PYNQ to find. 'X' should be set to '1' or '2' for U96 v1 or v2:
+Finish creating the BSP by packaging it up into a single BSP file and placing 
+it for PYNQ to find. 'X' should be set to '1' or '2' for U96 v1 or v2:
 
 ```shell
 cd <LOCAL ULTRA96>/bsp
@@ -143,10 +166,4 @@ rm ../Ultra96/sensors96b_vX.bsp
 petalinux-package --bsp -p sensors96b --hwsource ../Ultra96/sensors96b/sensors96b --output ../Ultra96/sensors96b_vX.bsp
 ```
 
-Note: The Microchip wilc driver used for U96 V2 has been pre-built and resides in the pre-stage PYNQ package area (wilc3000). To rebuild the `wilc-sdio.ko` driver you will need to wait for a PYNQ build to finish, then go back under the `<LOCAL PYNQ>/sdbuild/build/Ultra96/petalinux_bsp/sensors96b` the base directory of the PYNQ built BSP and manually run:
-
-```shell
-petalinux-build -c rootfs
-```
-
-This will build the device driver with the correct Linux kernel `#defines`.  After the rootfs has finished building you will need to locate the file `wilc-sdio.ko` and manually copy it over to the U96 PYNQ rootfs and update the git file version of it under the `<LOCAL ULTRA96>/Ultra96/packages/wilc3000` folder and then rebuild the SD image after which will contain and startup the Microchip wifi driver.
+Note: The PYNQ packages scripts and extra files will pull in v2 critical changes such as the wifi driver.
