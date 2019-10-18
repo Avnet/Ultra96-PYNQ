@@ -3,7 +3,7 @@
 ![alt tag](./software.png)
 
 ## Grab the pre-built SD images!
-Click the releases tab above for instructions and the images for Ultra96 v1 or v2
+Click the releases tab above or [here](https://github.com/Avnet/Ultra96-PYNQ/releases) for instructions and the images for Ultra96 v1 or v2
 
 ## Build PYNQ SD Image for Ultra96 V1/V2 (optional for advanced users)
 
