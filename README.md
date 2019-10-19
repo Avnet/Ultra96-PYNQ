@@ -18,8 +18,8 @@ Building PYNQ for Ultra96 can take many hours to complete.  Plan accordingly!
 **Required tools:**
 * Ubuntu 16.04 LTS 64-bit host PC
 * Passwordless SUDO privilege for the building user
-* At least 130GB of free hard disk space if you do not have the Xilinx tools installed yet
-* Roughly 60GB of free hard drive space if you have the Xilinx tools installed
+* At least 150GB of free hard disk space if you do not have the Xilinx tools installed yet
+* Roughly 80GB of free hard drive space if you have the Xilinx tools installed
 * You may be able to get away with less free hard drive space, YMMV
 * At least 8GB of RAM (more is better)
 * Xilinx PetaLinux (find the version compatible to a specific PYNQ release at
@@ -51,6 +51,7 @@ You must now choose Ultra96 board V1 or V2.  Change the softlink to point to the
 ```shell
 cd <LOCAL ULTRA96>/Ultra96
 ln -s specs/Ultra96_vX.spec Ultra96.spec
+ln -s petalinux_bsp_vX petalinux_bsp
 cp -f sensors96b/sensors96b.bit.vX sensors96b/sensors96b.bit
 cp -f sensors96b/sensors96b.tcl.vX sensors96b/sensors96b.tcl
 cp -f sensors96b/sensors96b.hwh.vX sensors96b/sensors96b.hwh
