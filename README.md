@@ -96,7 +96,11 @@ to the [online documentation](https://ultra96-pynq.readthedocs.io/en/latest/).
 
 ## Building PYNQ-compatible BSPs from scratch
 
-Note this is optional; it is needed only if you have good reason not to use the included BSP.
+**IMPORTANT: 2019.1 u-boot source for Ultra96 v1 and v2 will break any PetaLinux compile. If making your own bsp you must include the patch, bsp.cfg and recipe found here: https://github.com/Avnet/Ultra96-PYNQ/tree/image_v2.5/Ultra96/petalinux_bsp_v1/meta-user/recipes-bsp/u-boot**
+
+**Also, for Ultra96 v2 the u-boot fix is only in the bsp itself not in the petalinux_bsp_v2/meta-user/recipes-bsp/u-boot folder. The Ultra96 v2 bsp also does not include the extra bsp.cfg, the bsp.cfg omission should not matter to most users.**
+
+Note: building your own bsp is optional.  It is needed only if you have good reason not to use the included BSP.
 
 Obtain and install Xilinx Vivado or SDx and PetaLinux on Ubuntu 16.04 
 LTS. For Xilinx tools, you will need a version compatible to the PYNQ release
