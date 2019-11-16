@@ -99,9 +99,8 @@ to the [online documentation](https://ultra96-pynq.readthedocs.io/en/latest/).
 
 ## Building PYNQ-compatible BSPs from scratch
 
-**IMPORTANT: 2019.1 u-boot source for Ultra96 v1 and v2 will break any PetaLinux compile.  If making your own bsp you must include the patch, bsp.cfg and recipe found here: https://github.com/Avnet/Ultra96-PYNQ/tree/master/Ultra96/petalinux_bsp_v1/meta-user/recipes-bsp/u-boot**
-
-**Also, for Ultra96 v2 the u-boot fix is only in the bsp itself not in the petalinux_bsp_v2/meta-user/recipes-bsp/u-boot folder.  The Ultra96 v2 bsp also does not include the extra bsp.cfg, this should not matter to most users.**
+**IMPORTANT: 2019.1 u-boot source for Ultra96 v1 and v2 will break any PetaLinux compile.  If making your own bsp and trying to build it outside of an Ultra96 PYNQ build you must include the patch, bsp.cfg and recipe found here: https://github.com/Avnet/Ultra96-PYNQ/tree/master/Ultra96/petalinux_bsp_v1/meta-user/recipes-bsp/u-boot**
+**If creating the bsp and only building it with the Ultra96 PYNQ build system, the patches have been already added.**
 
 Note building your own bsp is optional; it is needed only if you have good reason not to use the included BSP.
 
