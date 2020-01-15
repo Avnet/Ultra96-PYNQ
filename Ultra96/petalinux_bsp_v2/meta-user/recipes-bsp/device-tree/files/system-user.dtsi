@@ -57,3 +57,18 @@
         };
 };
 
+&i2csw_4 {
+	/delete-node/ pmic@5e;
+	pmic1: pmic@43 {
+		reg = <0x43>;
+		compatible = "infineon,irps5401";
+	};
+	pmic2: pmic@44 {
+		reg = <0x44>;
+		compatible = "infineon,irps5401";
+	};
+	pmic3: pmic@45 {
+		reg = <0x45>;
+		compatible = "infineon,ir38060";
+	};
+};
