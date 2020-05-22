@@ -6,6 +6,12 @@
 
 Click the releases tab above or [click here to obtain SD card images and instructions for Ultra96 v1 or v2](https://github.com/Avnet/Ultra96-PYNQ/releases)
 
+## NEW: Xilinx Vitis AI hardware accelerated inference for PYNQ >= v2.5
+
+Supports Ultra96 v1 and v2, ZCU104 and ZCU111, [click here for how to get started!](https://www.hackster.io/wadulisi/easy-ai-with-python-and-pynq-dd4822)
+
+![alt tag](./pynq-dpu.jpeg)
+
 ## Build your own PYNQ SD Image for Ultra96 V1/V2 (this is optional for advanced users)
 
 This repository contains source files and instructions for building PYNQ to run on the [Ultra96 board](http://zedboard.org/product/ultra96).  
@@ -21,12 +27,12 @@ Building PYNQ for Ultra96 can take many hours to complete.  Plan accordingly!
 * Passwordless SUDO privilege for the building user
 * At least 160GB of free hard disk space if you do not have the Xilinx tools installed yet
 * Roughly 80GB of free hard drive space if you have the Xilinx tools installed
-* You may be able to get away with less free hard drive space, YMMV
+* You may be able to work with less free hard drive space, YMMV
 * At least 8GB of RAM (more is better)
 * Xilinx PetaLinux and Vivado or SDx (find the version compatible with a specific PYNQ release at
-[Xilinx Tool Version](https://pynq.readthedocs.io/en/latest/pynq_sd_card.html)
+[Xilinx Tool Version](https://pynq.readthedocs.io/en/latest/pynq_sd_card.html))
 * Read Xilinx UG1144 for PetaLinux host PC setup requirements
-* [Create a Xilinx account](https://www.xilinx.com/registration/create-account.html) to obtain and license the tools.
+* [Create a Xilinx account](https://www.xilinx.com/registration/create-account.html) to obtain and license the tools
 
 Retrieve the Ultra96 PYNQ board git into a NEW directory somewhere outside the PYNQ git directory.
 
