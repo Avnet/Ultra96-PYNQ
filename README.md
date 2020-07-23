@@ -14,10 +14,9 @@ Supports Ultra96 v1 and v2, ZCU104 and ZCU111, [click here for how to get starte
 
 ## Build your own PYNQ SD image for Ultra96 v1/v2
 
-This is optional for advanced users if they want to rebuild a PYNQ image.
+This is optional for advanced users if they want to rebuild their own U96 PYNQ images.
 
-This repository contains source files and instructions for building PYNQ to run on the [Ultra96 board](http://zedboard.org/product/ultra96).
-Users can leverage the included Petalinux BSPs to build the images on their own.
+This repository contains source files and instructions for building PYNQ to run on the [Ultra96 board](http://zedboard.org/product/ultra96-v2-development-board).
 
 Building PYNQ for Ultra96 can take many hours to complete.  Plan accordingly!
 
@@ -37,14 +36,13 @@ Building PYNQ for Ultra96 can take many hours to complete.  Plan accordingly!
 ### Step 1: Clone and configure the Ultra96 repository
 
 Retrieve the Ultra96 PYNQ board git into a new directory somewhere outside the PYNQ git directory.
-You can define the path to this new directoy (adjust this path if you want).
+You can define the path to this new directory as shown (adjust this path if you like).
 
 ```shell
 export LOCAL_ULTRA96=$(pwd)/ultra96-pynq-git
 ```
 
-Then we can clone the repository, and setup Ultra96-PYNQ git to work on 
-a branch (for example,`image_v2.6.0`).
+Then clone the repository and setup Ultra96-PYNQ git to work on a branch (for example, `image_v2.6.0`).
 
 ```shell
 git clone https://github.com/Avnet/Ultra96-PYNQ.git $LOCAL_ULTRA96
@@ -52,12 +50,13 @@ cd $LOCAL_ULTRA96
 git checkout -b image_v2.6.0 origin/image_v2.6.0
 ```
 
-BSPs for Ultra96 v1 and v2 are already included in this repo. 
-Users can use these BSPs to build PYNQ images by themselves.
-If you would like to build your own BSPs, [see notes at bottom](#build-pynq-compatible-bsps-from-scratch).
+Pre-built Ultra96 v1 and v2 BSPs for the current release are included under the GitHub Release File Assets tab, here: [pre-built U96 bsps](https://github.com/Avnet/Ultra96-PYNQ/releases)
 
-Now you must create and setup appropriate files for Ultra96 v1 or v2.
-Change the softlinks to point to the desired board version spec file.
+Alternatively, if you would like to start with your own or a new bsp [see notes at bottom](#build-pynq-compatible-bsps-from-scratch).
+
+***IMPORTANT: obtain and place the v1 (sensors96b_v1.bsp) or v2 (sensors96b_v2.bsp) bsps in the `$LOCAL_ULTRA96/Ultra96` folder.***
+
+Next you must setup soft links and move files depending upon whether you are using Ultra96 v1 or v2.
 
 For Ultra96 v1:
 
@@ -81,10 +80,10 @@ cp -f sensors96b/sensors96b.tcl.v2 sensors96b/sensors96b.tcl
 cp -f sensors96b/sensors96b.hwh.v2 sensors96b/sensors96b.hwh
 ```
 
-### Step 2: Setup PYNQ repository and building environment
+### Step 2: Setup the PYNQ repository and building environment
 
 Retrieve the main PYNQ repo into a new directory somewhere outside the Ultra96-PYNQ directory.
-You can define the path to this new directoy (adjust this path if you want).
+You can define the path to this new directoy (adjust this path if you like).
 
 ```shell
 export LOCAL_PYNQ=$(pwd)/pynq-git
@@ -108,7 +107,7 @@ make checkenv
 
 ### Step 3: Build PYNQ image
 
-In your PYNQ repository go to the directory `sdbuild` and run make.
+In your local PYNQ repository while still in the sub directory `sdbuild`, run make.
 
 **IMPORTANT: For the BOARDDIR path setting it should be absolute not relative, you have been warned!**
 
@@ -117,7 +116,7 @@ make clean
 make BOARDDIR=$LOCAL_ULTRA96
 ```
 
-Once the build has completed (it will take a long long time), if successful an SD card image will be available under the PYNQ git directory `sdbuild/output`. Depending on the PYNQ release, the image may have different names. As an example, for PYNQ v2.5, the image is `Ultra96-2.5.img`.
+Once the build has completed (it will take a long long time), if successful an SD card image will be available under the PYNQ git directory `sdbuild/output`. Depending on the PYNQ release, the image may have different names. As an example, for PYNQ v2.6, the image is `Ultra96-2.6.img`.
 
 Use Etcher or Win32DiskImager to write this image to an SD card.
 
@@ -127,21 +126,15 @@ For more information about how to setup and use PYNQ for Ultra96, please refer t
 
 ## Build PYNQ-compatible BSPs from scratch
 
-**IMPORTANT: for Ultra96 v1 and v2, u-boot source may not compile without Petalinux patches.**
+**Notes: Pre-built 2020.1 PetaLinux BSPs can be found under the GitHub v2.6.0 Releases Asset Files. If you optionally use these, you would skip the steps below to create and configure the BSPs from scratch and copy the prebuilt BSP to the location of where the build from scratch procedures creates them.**
 
-If making your own bsp and building it outside of Ultra96 PYNQ, you must include the [u-boot fixes](https://github.com/Avnet/Ultra96-PYNQ/tree/master/Ultra96/petalinux_bsp_v1/meta-user/recipes-bsp/u-boot).
-If building your bsp within the Ultra96 PYNQ build system, the u-boot fixes will be automatically applied.
+To get started you must obtain and install Xilinx Vitis or Vivado and Petalinux on Ubuntu 16.04 LTS. For Xilinx tools, you will need a version compatible with the PYNQ release (for Xilinx tool compatibility, see [Xilinx Tool Version](https://pynq.readthedocs.io/en/latest/pynq_sd_card.html)). If you are installing the Xilinx tools for the first time on your existing setup you must read Xilinx UG1144 for Petalinux setup requirements.
 
-Building your own bsp is optional. It is only needed if you have a good reason not to use the included BSP.
-
-Obtain and install Xilinx Vivado or SDx and Petalinux on Ubuntu 16.04 LTS. For Xilinx tools, you will need a version compatible with the PYNQ release (for Xilinx tool compatibility, see [Xilinx Tool Version](https://pynq.readthedocs.io/en/latest/pynq_sd_card.html)). If you are installing the Xilinx tools for the first time on your existing setup you must read Xilinx UG1144 for Petalinux setup requirements.
-
-If you prefer, you can also setup all the tools on a VirtualBox VM (e.g. using [Vagrant software](https://pynq.readthedocs.io/en/latest/pynq_sd_card.html#prepare-the-building-environment)).  
-If you purchased an Ultra96 board, a free voucher for the full-version Xilinx SDX tool suite and Petalinux is included.
+If you prefer, you can also setup all the tools on a VirtualBox VM (e.g. using [Vagrant software](https://pynq.readthedocs.io/en/latest/pynq_sd_card.html#prepare-the-building-environment)).
 
 ### Step 1: Hardware design
 
-Use the Xilinx SDx or Vivado tools to generate the hardware design. The hardware design source files contain a PL (Xilinx Programmable Logic) design that will enable PYNQ to interact with a Grove mezzanine board. The hardware design also contains Ultra96 board specific settings. After building the hardware design, it will need to be manually imported into the Petalinux BSP.
+Use the Xilinx Vivado tools to generate the hardware design. The hardware design source files contain a PL (Xilinx Programmable Logic) design sensors96b that enables U96 PYNQ to interact with a Grove mezzanine board. The hardware design also contains Ultra96 board specific settings. After building the hardware design, it will need to be manually imported into the Petalinux BSP.
 
 To build the hardware design for Ultra96 v1:
 
@@ -162,7 +155,7 @@ make
 ### Step 2: Create and configure BSP
 
 After the hardware design has finished building and you have installed Petalinux,
-create the Ultra96 BSP by executing Petalinux commands:
+create the Ultra96 BSP by executing:
 
 ```shell
 cd $LOCAL_ULTRA96
@@ -180,8 +173,8 @@ After the system config menus appear you need to set the following case-sensitiv
 * Subsystem AUTO Hardware Settings → Serial Settings → ATF serial stdin/stdout → (psu_uart_1)
 * Subsystem AUTO Hardware Settings → Serial Settings → DTG serial stdin/stdout → (psu_uart_1)
 * DTG Settings → MACHINE_NAME → (avnet-ultra96-rev1)
-* u-boot Configuration → u-boot config → (other)
-* u-boot Configuration → u-boot config target → keep this empty.
+* u-boot Configuration → u-boot config → (other)  `(Note: "other" is the default setting, leave it this way!)`
+* u-boot Configuration → u-boot config target → `set this to nothing, delete default and make it blank!`
 * Image Packaging Configuration → Root filesystem type → (EXT4 (SD/eMMC/SATA/USB))
 * Yocto Settings → YOCTO_MACHINE_NAME → (ultra96-zynqmp)
 
@@ -204,7 +197,7 @@ Locate the following configuration:
 
 * Device Drivers → Network device support → Wireless LAN → Texas Instrument devices
 
-Type 'n' to deselect it. Save the configuration using the default name and exit.
+Deselect it and exit, exit, exit. When asked, save the configuration using the default name and exit.
 
 ### Step 3: Package BSP
 
@@ -224,4 +217,4 @@ cd $LOCAL_ULTRA96/bsp
 petalinux-package --bsp --force -p sensors96b --hwsource ../Ultra96/sensors96b/sensors96b --output ../Ultra96/sensors96b_v2.bsp
 ```
 
-Note: The PYNQ packages scripts and extra files will pull in v2 critical changes automatically such as the wifi driver.
+Note: The PYNQ packages scripts and extra files will also pull in and override some settings for any bsp automatically.  For example the v2 Microchip wifi driver.
