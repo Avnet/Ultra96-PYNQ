@@ -27,5 +27,5 @@ for {set i 2} {$i < 8} {incr i} {
 set_property PFM.IRQ $intVar [get_bd_cells /xlconcat_0]
 
 # generate dsa
-write_dsa -force ./${overlay_name}.dsa
-validate_dsa ./${overlay_name}.dsa
+write_hw_platform -fixed -include_bit -force ./${overlay_name}.xsa
+validate_hw_platform ./${overlay_name}.xsa
