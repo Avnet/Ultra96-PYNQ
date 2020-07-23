@@ -29,9 +29,9 @@ Building PYNQ for Ultra96 can take many hours to complete.  Plan accordingly!
 * Roughly 80GB of free hard drive space if you have the Xilinx tools installed
 * You may be able to work with less free hard drive space, YMMV
 * At least 8GB of RAM (more is better)
-* Xilinx PetaLinux and Vivado or SDx (find the version compatible with a specific PYNQ release at
+* Xilinx Petalinux and Vivado or SDx (find the version compatible with a specific PYNQ release at
 [Xilinx Tool Version](https://pynq.readthedocs.io/en/latest/pynq_sd_card.html))
-* Read Xilinx UG1144 for PetaLinux host PC setup requirements
+* Read Xilinx UG1144 for Petalinux host PC setup requirements
 * [Create a Xilinx account](https://www.xilinx.com/registration/create-account.html) to obtain and license the tools
 
 ### Step 1: Clone and configure the Ultra96 repository
@@ -54,7 +54,7 @@ git checkout -b image_v2.6.0 origin/image_v2.6.0
 
 BSPs for Ultra96 v1 and v2 are already included in this repo. 
 Users can use these BSPs to build PYNQ images by themselves.
-If you would like to build your own BSPs, [see notes at bottom](#building-pynq-compatible-bsps-from-scratch).
+If you would like to build your own BSPs, [see notes at bottom](#build-pynq-compatible-bsps-from-scratch).
 
 Now you must create and setup appropriate files for Ultra96 v1 or v2.
 Change the softlinks to point to the desired board version spec file.
@@ -125,23 +125,23 @@ Insert card, PYNQ should boot up on the Ultra96!
 
 For more information about how to setup and use PYNQ for Ultra96, please refer to the [online documentation](https://ultra96-pynq.readthedocs.io/en/latest/).
 
-## Building PYNQ-compatible BSPs from scratch
+## Build PYNQ-compatible BSPs from scratch
 
-**IMPORTANT: u-boot source for Ultra96 v1 and v2 PetaLinux 2019.1 does not compile without patches.**
+**IMPORTANT: for Ultra96 v1 and v2, u-boot source may not compile without Petalinux patches.**
 
 If making your own bsp and building it outside of Ultra96 PYNQ, you must include the [u-boot fixes](https://github.com/Avnet/Ultra96-PYNQ/tree/master/Ultra96/petalinux_bsp_v1/meta-user/recipes-bsp/u-boot).
 If building your bsp within the Ultra96 PYNQ build system, the u-boot fixes will be automatically applied.
 
 Building your own bsp is optional. It is only needed if you have a good reason not to use the included BSP.
 
-Obtain and install Xilinx Vivado or SDx and PetaLinux on Ubuntu 16.04 LTS. For Xilinx tools, you will need a version compatible with the PYNQ release (for Xilinx tool compatibility, see [Xilinx Tool Version](https://pynq.readthedocs.io/en/latest/pynq_sd_card.html)). If you are installing the Xilinx tools for the first time on your existing setup you must read Xilinx UG1144 for PetaLinux setup requirements.
+Obtain and install Xilinx Vivado or SDx and Petalinux on Ubuntu 16.04 LTS. For Xilinx tools, you will need a version compatible with the PYNQ release (for Xilinx tool compatibility, see [Xilinx Tool Version](https://pynq.readthedocs.io/en/latest/pynq_sd_card.html)). If you are installing the Xilinx tools for the first time on your existing setup you must read Xilinx UG1144 for Petalinux setup requirements.
 
 If you prefer, you can also setup all the tools on a VirtualBox VM (e.g. using [Vagrant software](https://pynq.readthedocs.io/en/latest/pynq_sd_card.html#prepare-the-building-environment)).  
-If you purchased an Ultra96 board, a free voucher for the full-version Xilinx SDX tool suite and PetaLinux is included.
+If you purchased an Ultra96 board, a free voucher for the full-version Xilinx SDX tool suite and Petalinux is included.
 
 ### Step 1: Hardware design
 
-Use the Xilinx SDx or Vivado tools to generate the hardware design. The hardware design source files contain a PL (Xilinx Programmable Logic) design that will enable PYNQ to interact with a Grove mezzanine board. The hardware design also contains Ultra96 board specific settings. After building the hardware design, it will need to be manually imported into the PetaLinux BSP.
+Use the Xilinx SDx or Vivado tools to generate the hardware design. The hardware design source files contain a PL (Xilinx Programmable Logic) design that will enable PYNQ to interact with a Grove mezzanine board. The hardware design also contains Ultra96 board specific settings. After building the hardware design, it will need to be manually imported into the Petalinux BSP.
 
 To build the hardware design for Ultra96 v1:
 
@@ -161,8 +161,8 @@ make
 
 ### Step 2: Create and configure BSP
 
-After the hardware design has finished building and you have installed PetaLinux,
-create the Ultra96 BSP by executing PetaLinux commands:
+After the hardware design has finished building and you have installed Petalinux,
+create the Ultra96 BSP by executing Petalinux commands:
 
 ```shell
 cd $LOCAL_ULTRA96
@@ -194,11 +194,17 @@ Add the following line at the bottom of the file:
 MACHINE_FEATURES_remove_ultra96-zynqmp = "mipi"
 ```
 
-For v2 you may want to remove the TI WiFi driver module. Search through device drivers, networking, wireless and deselect the Texas Instrument drivers:
+For Ultra96 v2 you may want to remove the TI WiFi driver module. To do this:
 
 ```shell
 petalinux-config -c kernel
 ```
+
+Locate the following configuration:
+
+* Device Drivers → Network device support → Wireless LAN → Texas Instrument devices
+
+Type 'n' to deselect it. Save the configuration using the default name and exit.
 
 ### Step 3: Package BSP
 
