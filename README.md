@@ -50,13 +50,16 @@ cd $LOCAL_ULTRA96
 git checkout -b image_v2.6.0 origin/image_v2.6.0
 ```
 
-Pre-built Ultra96 v1 and v2 BSPs for the current release are included under the GitHub Release File Assets tab, here: [pre-built U96 bsps](https://github.com/Avnet/Ultra96-PYNQ/releases)
+Pre-built Ultra96 v1 and v2 BSPs and overlays for the current release are included under the [GitHub Release File Assets](https://github.com/Avnet/Ultra96-PYNQ/releases).
 
-Alternatively, if you would like to start with your own or a new bsp [see notes at bottom](#build-pynq-compatible-bsps-from-scratch).
+Alternatively, if you would like to start with your own or a new BSP [see notes at bottom](#build-pynq-compatible-bsps-from-scratch).
+When you prepare the new BSP by yourself, the overlay files will be prepared as well.
 
-***IMPORTANT: obtain and place the v1 (sensors96b_v1.bsp) or v2 (sensors96b_v2.bsp) bsps in the `$LOCAL_ULTRA96/Ultra96` folder.***
+**IMPORTANT: place the v1 (sensors96b_v1.bsp) or v2 (sensors96b_v2.bsp) BSP in the `$LOCAL_ULTRA96/Ultra96` folder.**
 
-Next you must setup soft links and move files depending upon whether you are using Ultra96 v1 or v2.
+**IMPORTANT: place the v1 (sensors96b.bit, sensors96b.hwh) or v2 (sensors96b.bit, sensors96b.hwh) overlay files in the `$LOCAL_ULTRA96/Ultra96/sensors96b` folder.**
+
+Next you must setup soft links depending upon whether you are using Ultra96 v1 or v2.
 
 For Ultra96 v1:
 
@@ -64,9 +67,6 @@ For Ultra96 v1:
 cd $LOCAL_ULTRA96/Ultra96
 ln -s specs/Ultra96_v1.spec Ultra96.spec
 ln -s petalinux_bsp_v1 petalinux_bsp
-cp -f sensors96b/sensors96b.bit.v1 sensors96b/sensors96b.bit
-cp -f sensors96b/sensors96b.tcl.v1 sensors96b/sensors96b.tcl
-cp -f sensors96b/sensors96b.hwh.v1 sensors96b/sensors96b.hwh
 ```
 
 For Ultra96 v2:
@@ -75,9 +75,6 @@ For Ultra96 v2:
 cd $LOCAL_ULTRA96/Ultra96
 ln -s specs/Ultra96_v2.spec Ultra96.spec
 ln -s petalinux_bsp_v2 petalinux_bsp
-cp -f sensors96b/sensors96b.bit.v2 sensors96b/sensors96b.bit
-cp -f sensors96b/sensors96b.tcl.v2 sensors96b/sensors96b.tcl
-cp -f sensors96b/sensors96b.hwh.v2 sensors96b/sensors96b.hwh
 ```
 
 ### Step 2: Setup the PYNQ repository and building environment
@@ -173,8 +170,8 @@ After the system config menus appear you need to set the following case-sensitiv
 * Subsystem AUTO Hardware Settings → Serial Settings → ATF serial stdin/stdout → (psu_uart_1)
 * Subsystem AUTO Hardware Settings → Serial Settings → DTG serial stdin/stdout → (psu_uart_1)
 * DTG Settings → MACHINE_NAME → (avnet-ultra96-rev1)
-* u-boot Configuration → u-boot config → (other)  `(Note: "other" is the default setting, leave it this way!)`
-* u-boot Configuration → u-boot config target → `set this to nothing, delete default and make it blank!`
+* u-boot Configuration → u-boot config → (other)  (Note: "other" is the default setting, leave it this way!)
+* u-boot Configuration → u-boot config target → set this to nothing, delete default and make it blank!
 * Image Packaging Configuration → Root filesystem type → (EXT4 (SD/eMMC/SATA/USB))
 * Yocto Settings → YOCTO_MACHINE_NAME → (ultra96-zynqmp)
 
@@ -197,7 +194,8 @@ Locate the following configuration:
 
 * Device Drivers → Network device support → Wireless LAN → Texas Instrument devices
 
-Deselect it and exit, exit, exit. When asked, save the configuration using the default name and exit.
+Deselect it (type 'N') and exit, exit, exit. 
+When asked, save the configuration using the default name and exit.
 
 ### Step 3: Package BSP
 
