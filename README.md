@@ -8,7 +8,7 @@ Click the releases tab above or [click here to obtain SD card images and instruc
 
 ## Xilinx Vitis AI hardware accelerated inference for PYNQ >= v2.5
 
-Supports Ultra96 v1 and v2, ZCU104 and ZCU111, [click here for how to get started!](https://www.hackster.io/wadulisi/easy-ai-with-python-and-pynq-dd4822)
+Built for Ultra96 v1/2 and also ZCU104 and ZCU111, [click here for how to get started!](https://www.hackster.io/wadulisi/easy-ai-with-python-and-pynq-dd4822)
 
 ![alt tag](./pynq-dpu.jpeg)
 
@@ -28,10 +28,13 @@ Building PYNQ for Ultra96 can take many hours to complete.  Plan accordingly!
 * Roughly 80GB of free hard drive space if you have the Xilinx tools installed
 * You may be able to work with less free hard drive space, YMMV
 * At least 8GB of RAM (more is better)
-* Xilinx Petalinux and Vivado or SDx (find the version compatible with a specific PYNQ release at
+* Xilinx Petalinux and Vitis or Vivado (find the version compatible with a specific PYNQ release at
 [Xilinx Tool Version](https://pynq.readthedocs.io/en/latest/pynq_sd_card.html))
 * Read Xilinx UG1144 for Petalinux host PC setup requirements
 * [Create a Xilinx account](https://www.xilinx.com/registration/create-account.html) to obtain and license the tools
+* Note: for web-pack and some other users, building will fail because of not having a license for a required HDMI IP core
+  * Once merged this [PR](https://github.com/Xilinx/PYNQ/pull/1156) should allow one to not have to build for the zcu104 which uses the HDMI IP
+  * See this forum [thread](https://discuss.pynq.io/t/pynq-2-5-2-how-to-disable-synthesis-for-undesired-boards-to-save-time-and-licences/1317) to learn how to skip building the hardware design for all PYNQ boards
 
 ### Step 1: Clone and configure the Ultra96 repository
 
