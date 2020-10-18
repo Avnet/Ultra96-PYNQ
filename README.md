@@ -22,7 +22,7 @@ Building PYNQ for Ultra96 can take many hours to complete.  Plan accordingly!
 
 **Required tools:**
 
-* Ubuntu 16.04 LTS 64-bit host PC
+* Ubuntu 16.04 or 18.04 LTS 64-bit host PC
 * Passwordless SUDO privilege for the building user
 * At least 160GB of free hard disk space if you do not have the Xilinx tools installed yet
 * Roughly 80GB of free hard drive space if you have the Xilinx tools installed
