@@ -6,55 +6,55 @@
 		reset-gpios = <&gpio 7 1>;
 		// requires a patched pwrseq_simple.c for WILC3000
 		chip_en-gpios = <&gpio 8 1>;
-        };
+	};
 
-        // Remove V1 Power ON/OFF controller from U96 V1 DT
-        /delete-node/ ltc2954;
+	// Remove V1 Power ON/OFF controller from U96 V1 DT
+	/delete-node/ ltc2954;
 };
 
 &uart0 {
-        // Remove TI child node from U96 V1 DT
-        /delete-node/bluetooth;
+		// Remove TI child node from U96 V1 DT
+		/delete-node/bluetooth;
 };
 
 &gpio {
-        /delete-property/gpio-line-names;
+		/delete-property/gpio-line-names;
 };
 
 &sdhci1 {
-        max-frequency = <50000000>;
-	// cap-power-off-card not compatible with WILC3000
-        /delete-property/cap-power-off-card;
-        wilc_sdio@1 {
-                compatible = "microchip,wilc3000";
-                reg = <0>;
-                bus-width = <0x4>;
-                status = "okay";
-        };
-        // Remove TI child node from U96 V1 DT
-        /delete-node/wifi@2;
+		max-frequency = <50000000>;
+		// cap-power-off-card not compatible with WILC3000
+		/delete-property/cap-power-off-card;
+		wilc_sdio@1 {
+				compatible = "microchip,wilc3000";
+				reg = <0>;
+				bus-width = <0x4>;
+				status = "okay";
+		};
+		// Remove TI child node from U96 V1 DT
+		/delete-node/wifi@2;
 };
 
 &spi0 {
-        is-decoded-cs = <0>;
-        num-cs = <1>;
-        status = "okay";
-        spidev@0x00 {
-                compatible = "rohm,dh2228fv";
-                spi-max-frequency = <1000000>;
-                reg = <0>;
-        };
+		is-decoded-cs = <0>;
+		num-cs = <1>;
+		status = "okay";
+		spidev@0x00 {
+				compatible = "rohm,dh2228fv";
+				spi-max-frequency = <1000000>;
+				reg = <0>;
+		};
 };
 
 &spi1 {
-        is-decoded-cs = <0>;
-        num-cs = <1>;
-        status = "okay";
-        spidev@0x00 {
-                compatible = "rohm,dh2228fv";
-                spi-max-frequency = <1000000>;
-                reg = <0>;
-        };
+		is-decoded-cs = <0>;
+		num-cs = <1>;
+		status = "okay";
+		spidev@0x00 {
+				compatible = "rohm,dh2228fv";
+				spi-max-frequency = <1000000>;
+				reg = <0>;
+		};
 };
 
 &i2csw_4 {
@@ -72,3 +72,8 @@
 		compatible = "infineon,ir38060";
 	};
 };
+
+&i2csw_5 {
+	/delete-node/ ina226@40;
+};
+

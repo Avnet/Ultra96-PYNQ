@@ -1,20 +1,21 @@
-From cd88af06be5bad2bf19f4ca7ff5f19f4295ebbca Mon Sep 17 00:00:00 2001
-From: Fred Kellerman <fredkellerman@users.noreply.github.com>
-Date: Tue, 24 Sep 2019 19:49:30 -0400
-Subject: [PATCH] Patch the kernel to manipulate the wifi part's pins
+From 078faedefe997c82aaadcffd85e2a3f108539b55 Mon Sep 17 00:00:00 2001
+From: FredKellerman <fred@noreply.com>
+Date: Wed, 22 Jul 2020 02:34:13 -0400
+Subject: [PATCH] Patch xilinx-v2021.1 wifi gpio for u96v2
 
 ---
- drivers/mmc/core/pwrseq_simple.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ drivers/mmc/core/pwrseq_simple.c | 29 ++++++++++++++++++++++++++++-
+ 1 file changed, 28 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/mmc/core/pwrseq_simple.c b/drivers/mmc/core/pwrseq_simple.c
-index a8b9fee..3cfdc66 100644
+index ea4d367..b8f56bd 100644
 --- a/drivers/mmc/core/pwrseq_simple.c
 +++ b/drivers/mmc/core/pwrseq_simple.c
-@@ -109,6 +109,33 @@ static int mmc_pwrseq_simple_probe(struct platform_device *pdev)
+@@ -112,7 +112,34 @@ static int mmc_pwrseq_simple_probe(struct platform_device *pdev)
  {
  	struct mmc_pwrseq_simple *pwrseq;
  	struct device *dev = &pdev->dev;
+-
 +        struct gpio_desc *gpio_chip_en;
 +        struct gpio_desc *gpio_resetn;
 +
@@ -42,9 +43,10 @@ index a8b9fee..3cfdc66 100644
 +                gpiod_put(gpio_chip_en);
 +                mdelay(5);
 +        }
- 
++ 
  	pwrseq = devm_kzalloc(dev, sizeof(*pwrseq), GFP_KERNEL);
  	if (!pwrseq)
+ 		return -ENOMEM;
 -- 
 2.7.4
 

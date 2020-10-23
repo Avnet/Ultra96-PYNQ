@@ -1,26 +1,40 @@
 /include/ "system-conf.dtsi"
 / {
+	ina226-u35 {
+		compatible = "iio-hwmon";
+		io-channels = <&u35 0x0 &u35 0x1 &u35 0x2 &u35 0x3>;
+	};
+};
+
+&i2csw_5 {
+	u35: ina226@40 {
+		compatible = "ti,ina226";
+		#io-channel-cells = <1>;
+		label = "ina226-u35";
+		reg = <0x40>;
+		shunt-resistor = <0x2710>;
+	};
 };
 
 &spi0 {
-        is-decoded-cs = <0>;
-        num-cs = <1>;
-        status = "okay";
-        spidev@0x00 {
-                compatible = "rohm,dh2228fv";
-                spi-max-frequency = <1000000>;
-                reg = <0>;
-        };
+		is-decoded-cs = <0>;
+		num-cs = <1>;
+		status = "okay";
+		spidev@0x00 {
+				compatible = "rohm,dh2228fv";
+				spi-max-frequency = <1000000>;
+				reg = <0>;
+		};
 };
 
 &spi1 {
-        is-decoded-cs = <0>;
-        num-cs = <1>;
-        status = "okay";
-        spidev@0x00 {
-                compatible = "rohm,dh2228fv";
-                spi-max-frequency = <1000000>;
-                reg = <0>;
-        };
+		is-decoded-cs = <0>;
+		num-cs = <1>;
+		status = "okay";
+		spidev@0x00 {
+				compatible = "rohm,dh2228fv";
+				spi-max-frequency = <1000000>;
+				reg = <0>;
+		};
 };
 
