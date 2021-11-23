@@ -74,18 +74,7 @@ Skip to :ref:`connecting-to-jupyter-notebooks` or keep reading for other connect
 WiFi
 ^^^^
 
-The Ultra96 includes a WiFi chip that can be used to connect to other WiFi networks as a client, or act as a WiFi access point (hotspot). 
-
-WiFi access Point
-^^^^^^^^^^^^^^^^^
-
-On boot, the board will enable itself as a WiFi access point. 
-
-The Access point name will be **pynq_<MAC Address>** where **<MAC address>** is the MAC address for your board. 
-
-To connect to the board's WiFi network (access point), open your wireless network configuration, search for and connect to an SSID starting with **pynq_** followed by the MAC address of your board. 
-
-Skip to :ref:`connecting-to-jupyter-notebooks` or keep reading for other connection options.
+The Ultra96 includes a WiFi chip that can be used to connect to other WiFi networks as a client. 
 
 Other WiFi networks
 ^^^^^^^^^^^^^^^^^^^
@@ -115,9 +104,8 @@ Connecting to Jupyter Notebooks
 To connect to Jupyter Notebook, on the host computer, open a web browser (Chrome is preferred) and browse to one of the following addresses depending on how you setup your connection to the board in the instructions above:
 
 * USB: http://192.168.3.1 
-* WiFi access point: http://192.168.2.1 
 * Other WiFi: Browse to the IP address of the board http://<IP address of board> You can find the IP from a terminal, from your router, or from a network scanning app. 
-* DisplayPort monitor: from the Chromium browser, browse to http://192.168.2.1
+* DisplayPort monitor: from the Chromium browser, browse to http://192.168.3.1
 
 It may take a few seconds for your computer to resolve the IP address and connect to the board the first time it is powered on. 
 

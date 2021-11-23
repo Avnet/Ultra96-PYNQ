@@ -1,13 +1,17 @@
 SUMMARY = "Recipe for building an external wilc Linux kernel module"
 SECTION = "PETALINUX/modules"
-LICENSE = "GPLv3"
-LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-3.0;md5=c79ff39f19dfec6d293b95dea7b07891"
+LICENSE = "GPLv2"
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0;md5=801f80980d171dd6425610833a22dbe6"
 
 inherit module
 
-SRC_URI =  "git://github.com/Avnet/u96v2-wilc-driver;protocol=http;branch=v15_2"
+SRC_URI = "git://github.com/linux4wilc/driver.git;protocol=git;branch=${BRANCH} \
+           file://0001-ultra96-modifications.patch \
+           "
 
-SRCREV = "01ab7484e0e6b2191c69d7ec7c6e89da5ca51f0f"
+# Tag: wilc_linux_15_3_1
+SRCREV = "20ab626503feb4850632337b97128f1efd73ba80"
+BRANCH = "master"
 
 DEPENDS += "virtual/kernel"
 
@@ -20,3 +24,4 @@ EXTRA_OEMAKE = 'CONFIG_WILC=y \
 		CONFIG_WILC1000_HW_OOB_INTR=n \
 		KERNEL_SRC="${STAGING_KERNEL_DIR}" \
 		O=${STAGING_KERNEL_BUILDDIR}'
+

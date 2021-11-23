@@ -7,7 +7,7 @@ set -x
 cd /wilc_bld
 git clone https://github.com/linux4wilc/firmware
 cd firmware
-git checkout tags/wilc_linux_15_2
+git checkout tags/wilc_linux_15_3_1
 cp /wilc_bld/firmware/wilc3000_wifi_firmware.bin /lib/firmware/mchp/
 cp /wilc_bld/firmware/wilc3000_ble_firmware.bin /lib/firmware/mchp/
 cd /
@@ -17,7 +17,7 @@ rm -rf wilc_bld
 echo "wilc-sdio" >> /etc/modules
 
 # Wilc cannot do wlan1 only wlan0 and p2p0, so fix that for host ap
-chmod a+x /usr/local/share/wpa_ap/ap.sh
+#chmod a+x /usr/local/share/wpa_ap/ap.sh
 if [ -f /etc/default/isc-dhcp-server ] && \
 	grep -q "INTERFACES=" /etc/default/isc-dhcp-server; then
 	if ! grep -q "p2p0" /etc/default/isc-dhcp-server; then
@@ -45,5 +45,3 @@ iface wlan0 inet dhcp
 	wpa-conf /etc/wpa_supplicant.conf
 EOT
 
-# Uncomment the following line to enable wireless access point by default
-# systemctl enable wpa_ap.service
