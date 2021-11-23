@@ -1,52 +1,50 @@
-From 078faedefe997c82aaadcffd85e2a3f108539b55 Mon Sep 17 00:00:00 2001
-From: FredKellerman <fred@noreply.com>
-Date: Wed, 22 Jul 2020 02:34:13 -0400
-Subject: [PATCH] Patch xilinx-v2021.1 wifi gpio for u96v2
+From b9a042c7496a96452c0ddcd8eaa54449742bd86f Mon Sep 17 00:00:00 2001
+From: FredKellerman <noreply@noreply.com>
+Date: Thu, 23 Sep 2021 01:42:12 -0400
+Subject: [PATCH] Fix gpio pins for U96v2 Microchip wifi
 
 ---
- drivers/mmc/core/pwrseq_simple.c | 29 ++++++++++++++++++++++++++++-
- 1 file changed, 28 insertions(+), 1 deletion(-)
+ drivers/mmc/core/pwrseq_simple.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
 diff --git a/drivers/mmc/core/pwrseq_simple.c b/drivers/mmc/core/pwrseq_simple.c
-index ea4d367..b8f56bd 100644
+index ea4d3670560e..b31c1af939f0 100644
 --- a/drivers/mmc/core/pwrseq_simple.c
 +++ b/drivers/mmc/core/pwrseq_simple.c
-@@ -112,7 +112,34 @@ static int mmc_pwrseq_simple_probe(struct platform_device *pdev)
+@@ -112,6 +112,33 @@ static int mmc_pwrseq_simple_probe(struct platform_device *pdev)
  {
  	struct mmc_pwrseq_simple *pwrseq;
  	struct device *dev = &pdev->dev;
--
-+        struct gpio_desc *gpio_chip_en;
-+        struct gpio_desc *gpio_resetn;
++	struct gpio_desc *gpio_chip_en;
++	struct gpio_desc *gpio_resetn;
 +
-+        // Leave resetn low and let pwrseq take care of it
-+        gpio_resetn = gpiod_get(dev, "reset", GPIOD_ASIS);
-+        if (IS_ERR(gpio_resetn)) {
-+                dev_warn(dev,
-+                   "mmc failed to get default resetn GPIO\n");
-+        } else {
-+                dev_info(dev, "mmc succesfully got gpio_resetn\n");
-+                gpiod_direction_output(gpio_resetn, 1);  // low
-+                gpiod_put(gpio_resetn);
-+        }
++	// Leave resetn low and let pwrseq take care of it
++	gpio_resetn = gpiod_get(dev, "reset", GPIOD_ASIS);
++	if (IS_ERR(gpio_resetn)) {
++		dev_warn(dev,
++			"mmc failed to get default resetn GPIO\n");
++	} else {
++		dev_info(dev, "mmc succesfully got gpio_resetn\n");
++		gpiod_direction_output(gpio_resetn, 1);  // low
++		gpiod_put(gpio_resetn);
++	}
 +
-+        // Turn power off then back on
-+        gpio_chip_en = gpiod_get(dev, "chip_en", GPIOD_ASIS);
-+        if (IS_ERR(gpio_chip_en)) {
-+                dev_warn(dev,
-+                   "mmc failed to get default chip_en GPIO\n");
-+        } else {
-+                dev_info(dev, "mmc succesfully got gpio_chip_en\n");
-+                gpiod_direction_output(gpio_chip_en, 1);  // low (chip off)
-+                mdelay(5);
-+                gpiod_set_value(gpio_chip_en, 0); // high (chip on)
-+                gpiod_put(gpio_chip_en);
-+                mdelay(5);
-+        }
-+ 
++	// Turn power off then back on
++	gpio_chip_en = gpiod_get(dev, "chip_en", GPIOD_ASIS);
++	if (IS_ERR(gpio_chip_en)) {
++		dev_warn(dev,
++			"mmc failed to get default chip_en GPIO\n");
++	} else {
++		dev_info(dev, "mmc succesfully got gpio_chip_en\n");
++		gpiod_direction_output(gpio_chip_en, 1);  // low (chip off)
++		mdelay(5);
++		gpiod_set_value(gpio_chip_en, 0); // high (chip on)
++		gpiod_put(gpio_chip_en);
++		mdelay(5);
++	}
+ 
  	pwrseq = devm_kzalloc(dev, sizeof(*pwrseq), GFP_KERNEL);
  	if (!pwrseq)
- 		return -ENOMEM;
 -- 
-2.7.4
+2.25.1
 
