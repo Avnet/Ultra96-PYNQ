@@ -4,7 +4,7 @@
 
 ## Grab the pre-built SD images
 
-Click the releases tab above or [click here to obtain SD card images and instructions for Ultra96 v1 or v2](https://github.com/Avnet/Ultra96-PYNQ/releases)
+[Click here to obtain SD card images for Ultra96 v1 or v2](http://www.pynq.io/board.html)
 
 ## Xilinx Vitis AI hardware accelerated inference for PYNQ >= v2.5
 
@@ -34,7 +34,7 @@ Building PYNQ for Ultra96 can take many hours to complete.  Plan accordingly!
 
 ### Step 1: Setup the tools
 
-Make sure you 'source' the settings64.sh and settings.sh scripts to add the PetaLinux and Vivado tools to the path 
+Make sure you 'source' the settings64.sh (Vivado) and settings.sh (PetaLinux) scripts to add them to your path 
 
 ### Step 2: One time PYNQ tools setup
 * Clone PYNQ from https://github.com/Xilinx/PYNQ and checkout branch: image_v2.7
@@ -47,7 +47,7 @@ Make sure you 'source' the settings64.sh and settings.sh scripts to add the Peta
 
 Retrieve the Ultra96 PYNQ board git into a new directory somewhere outside the prior PYNQ git directory.
 
-Clone the repository and setup Ultra96-PYNQ git to work on the `image_v2.7` branch.
+Clone the Ultra96-PYNQ git repo and checkout the `image_v2.7` branch.
 
 ```shell
 git clone https://github.com/Avnet/Ultra96-PYNQ.git --branch image_v2.7
@@ -57,16 +57,18 @@ git clone https://github.com/Avnet/Ultra96-PYNQ.git --branch image_v2.7
 
 Execute a simple build script that will create an SD image for either Ultra96 v1 or v2.
 
+Before executing the script, cd into the previously cloned repo directory.
+
 For Ultra96 v2:
 ```shell
-./buildu96 2
+./build96 2
 ```
 For Ultra96 v1:
 ```shell
 ./build96 1
 ```
 
-The build script will first download a large rootfs file and appropriate bsp file. The downloads can take some time.
+The build script will first download the PYNQ git repo then a large rootfs file and an appropriate bsp file. The downloads can take some time.
 Once the files are downloaded, the script is smart enough to use what has already been downloaded.  The build itself
 can easily take hours to complete.
 
