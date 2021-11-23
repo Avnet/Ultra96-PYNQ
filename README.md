@@ -59,7 +59,7 @@ Execute a simple build script that will create an SD image for either Ultra96 v1
 
 For Ultra96 v2:
 ```shell
-./buildu96 2
+./build96 2
 ```
 For Ultra96 v1:
 ```shell
