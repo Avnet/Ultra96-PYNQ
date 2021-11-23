@@ -57,6 +57,8 @@ git clone https://github.com/Avnet/Ultra96-PYNQ.git --branch image_v2.7
 
 Execute a simple build script that will create an SD image for either Ultra96 v1 or v2.
 
+Before executing cd into the cloned repo directory.
+
 For Ultra96 v2:
 ```shell
 ./build96 2
