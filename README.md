@@ -4,7 +4,7 @@
 
 ## Grab the pre-built SD images
 
-Click the releases tab above or [click here to obtain SD card images and instructions for Ultra96 v1 or v2](https://github.com/Avnet/Ultra96-PYNQ/releases)
+Click the releases tab above or [click here to obtain SD card images and instructions for Ultra96 v1 or v2](http://www.pynq.io/board.html)
 
 ## Xilinx Vitis AI hardware accelerated inference for PYNQ >= v2.5
 
