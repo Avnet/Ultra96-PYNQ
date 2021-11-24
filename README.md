@@ -8,7 +8,7 @@
 
 ## Xilinx Vitis AI hardware accelerated inference for PYNQ >= v2.5
 
-Built for Ultra96 v1/2 and also ZCU104 and ZCU111, [click here for how to get started!](https://www.hackster.io/wadulisi/easy-ai-with-python-and-pynq-dd4822)
+Built for Ultra96 v1 & v2, ZCU104 and ZCU111, [click here for how to get started!](https://www.hackster.io/wadulisi/easy-ai-with-python-and-pynq-dd4822)
 
 ![alt tag](./pynq-dpu.jpeg)
 
