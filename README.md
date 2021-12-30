@@ -53,7 +53,7 @@ Clone the Ultra96-PYNQ git repo and checkout the `image_v2.7` branch.
 git clone https://github.com/Avnet/Ultra96-PYNQ.git --branch image_v2.7
 ```
 
-### Step 4: Build the SD image Ultra96
+### Step 4: Build the SD image for Ultra96
 
 Execute a simple build script that will create an SD image for either Ultra96 v1 or v2.
 
@@ -74,4 +74,4 @@ can easily take hours to complete.
 
 ### Step 5: Burn the SD image
 
-Please use Balena Etcher or Win32 Disk Imager to copy the .img file onto an SD card 16GB or larger.
+Please use Balena Etcher or Win32 Disk Imager to copy the .img file onto an SD card 16GB or larger.  Samsung EVO based SD cards and related rebrands will not boot on the Ultra96.  Delkin and SanDisk uhs-1 type cards work well, other brands may also.
