@@ -94,8 +94,7 @@ fi
 if [ -d "$PYNQ_GIT_LOCAL_PATH/boards/Pynq-Z1" ]; then
 	echo "Status: Removing boards to speed up build time and eliminate needing hdmi license"
 	cd $PYNQ_GIT_LOCAL_PATH
-	git rm -rf $PYNQ_GIT_LOCAL_PATH/boards/ZCU104
-	git rm -rf $PYNQ_GIT_LOCAL_PATH/boards/Pynq-Z1
+	echo "" > build.sh
 	# The changes must be committed because PYNQ clones local when it builds
 	git commit -am 'remove boards'
 	echo "Status: Removed other boards"
