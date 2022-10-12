@@ -1,6 +1,8 @@
 /include/ "system-conf.dtsi"
 / {
-	sdio_pwrseq: sdio_pwrseq {
+	/delete-node/ ina226;
+
+	sdio_pwrseq_patch: sdio_pwrseq {
 		compatible = "mmc-pwrseq-simple";
 		// MIO[7] RESETN for WILC3000 active low
 		reset-gpios = <&gpio 7 1>;
@@ -72,6 +74,7 @@
 		compatible = "infineon,ir38060";
 	};
 };
+
 
 &i2csw_5 {
 	/delete-node/ ina226@40;
