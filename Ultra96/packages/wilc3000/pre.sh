@@ -1,13 +1,14 @@
 #! /bin/bash
 
+# Copyright (C) 2022 Xilinx, Inc
+# SPDX-License-Identifier: BSD-3-Clause
+
 target=$1
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-kernel=5.4.0-xilinx-v2020.2
+kernel=5.15.19-xilinx-v2022.1
 
-# AP no longer supported for v2.7
-#sudo cp $script_dir/wpa_ap.service $target/lib/systemd/system
-#sudo cp -r $script_dir/wpa_ap $target/usr/local/share/
-
+sudo cp $script_dir/wpa_ap.service $target/lib/systemd/system
+sudo cp -r $script_dir/wpa_ap $target/usr/local/share/
 sudo mkdir $target/wilc_bld
 sudo mkdir -p $target/lib/firmware/mchp
 cd $BUILD_ROOT/${PYNQ_BOARD}/petalinux_project

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copyright (C) 2021 Xilinx, Inc
+# SPDX-License-Identifier: BSD-3-Clause
+
 # User can adjust wlan0 to connect to a specific wifi network
 while ! ifconfig wlan0 up
 do
@@ -27,4 +30,3 @@ sleep 2
 wpa_supplicant -c ./wpa_ap_actual.conf  -ip2p0 &
 
 ifconfig p2p0 $ip
-
