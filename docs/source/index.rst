@@ -13,5 +13,4 @@ For more information on PYNQ, please see the PYNQ readthedocs pages: https://pyn
    :hidden:
    
    getting_started
-   sensors96b_overlay
    for_more_information
