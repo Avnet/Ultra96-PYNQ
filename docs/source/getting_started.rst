@@ -131,7 +131,6 @@ To get started using PYNQ, try running the provided example notebooks:
 
 * **getting_started**: includes an introduction to using Jupyter notebook with PYNQ, the Python environment, and how to use some basic features of the current platform.
 * **common**: contains example notebooks on how to download an overlay, how to set the Zynq clocks, how to execute Linux shell commands, and how to use USB devices.
-* **sensors96b**: includes example notebooks to use peripherals with the mezzanine board.
 
 .. image:: images/example_notebooks.png
     :height: 600px
