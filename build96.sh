@@ -46,7 +46,7 @@ ROOTFS_TMP_DIR="$START_DIR/rootfs_tmp"
 ROOTFS_ZIP_FILE=jammy.aarch64.3.0.0.tar.gz
 PREBUILT_IMAGE_ZIP_FILE=pynq-3.0.0.tar.gz
 ROOTFS_IMAGE_FILE_URL=https://www.xilinx.com/bin/public/openDownload?filename=jammy.aarch64.3.0.0.tar.gz
-PREBUILT_IMAGE_FILE_URL=https://files.pythonhosted.org/packages/cd/78/47108a2546284a84bc163eebc47a1efcf9675a877027b52e41f7ed76facc/pynq-3.0.0.tar.gz
+PREBUILT_IMAGE_FILE_URL=https://github.com/Xilinx/PYNQ/releases/download/v3.0.0/pynq-3.0.0.tar.gz
 
 ##################################
 # Fetching and compiling         #
