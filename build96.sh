@@ -109,34 +109,18 @@ fi
 ln -fs $ROOTFS_TMP_DIR/$ROOTFS_ZIP_FILE $PYNQ_GIT_LOCAL_PATH/sdbuild/prebuilt/pynq_rootfs.aarch64.tar.gz
 ln -fs $ROOTFS_TMP_DIR/$PREBUILT_IMAGE_ZIP_FILE $PYNQ_GIT_LOCAL_PATH/sdbuild/prebuilt/pynq_sdist.tar.gz
 
-if [ -f "$ROOTFS_TMP_DIR/$ROOTFS_ZIP_FILE" ]; then 
-	echo "Status: Image file $ROOTFS_TMP_DIR/$ROOTFS_ZIP_FILE -> already exists"
-else
-	echo "Status: Fetching pre-built rootfs"
-	if [ -f "$ROOTFS_TMP_DIR/$ROOTFS_ZIP_FILE" ]; then
-		echo "Status: zip file -> already exists"
-	else
-		wget "$ROOTFS_IMAGE_FILE_URL" -O "$ROOTFS_TMP_DIR/$ROOTFS_ZIP_FILE"
-	fi
-fi
+echo "Status: Fetching pre-built rootfs"
+wget -c "$ROOTFS_IMAGE_FILE_URL" -O "$ROOTFS_TMP_DIR/$ROOTFS_ZIP_FILE"
 
-if [ -f "$ROOTFS_TMP_DIR/$PREBUILT_IMAGE_ZIP_FILE" ]; then 
-	echo "Status: Image file $ROOTFS_TMP_DIR/$PREBUILT_IMAGE_ZIP_FILE -> already exists"
-else
-	echo "Status: Fetching pre-built PYNQ image file"
-	wget "$PREBUILT_IMAGE_FILE_URL" -O "$ROOTFS_TMP_DIR/$PREBUILT_IMAGE_ZIP_FILE"
-fi
+echo "Status: Fetching pre-built PYNQ image file"
+wget -c "$PREBUILT_IMAGE_FILE_URL" -O "$ROOTFS_TMP_DIR/$PREBUILT_IMAGE_ZIP_FILE"
 
-if [ -f "$BSP_FILE_PATH/$BSP_FILE" ]; then 
-	echo "Status: $BSP_FILE -> already exists"
-else
-	echo "Status: Fetching pre-built BSP"
-	wget "$BSP_FILE_URL/$BSP_FILE" -O "$BSP_FILE_PATH/$BSP_FILE"
-	if ! [ -s "$BSP_FILE_PATH/$BSP_FILE" ]; then
-		rm "$BSP_FILE_PATH/$BSP_FILE"
-		echo "Error: Failed to fetch bsp file!"
-		exit -1
-	fi
+echo "Status: Fetching pre-built BSP"
+wget -c "$BSP_FILE_URL/$BSP_FILE" -O "$BSP_FILE_PATH/$BSP_FILE"
+if ! [ -s "$BSP_FILE_PATH/$BSP_FILE" ]; then
+	rm "$BSP_FILE_PATH/$BSP_FILE"
+	echo "Error: Failed to fetch bsp file!"
+	exit -1
 fi
 
 if [ -f "$OVERLAY_FILE_PATH/$OVERLAY_NAME.bit" -a -f "$OVERLAY_FILE_PATH/$OVERLAY_NAME.hwh" ] ; then
