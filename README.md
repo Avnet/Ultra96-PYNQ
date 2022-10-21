@@ -65,7 +65,7 @@ For Ultra96 v1:
 ```
 
 The build script will first download the PYNQ git repo then a large rootfs, other files and appropriate bsp files. The downloads can take some time.
-Once the files are downloaded, the script is smart enough to use what has already been downloaded. If a file download stops part way you will have to manually delete the corrupted file. Currently the build script does not clean this up automatically. The overall build itself can take some time to complete.
+Once the files are downloaded, the script is smart enough to use what has already been downloaded. If a file download stops part way you will have to manually delete the corrupted file. Currently the build script does not clean this up automatically. The overall build itself can take some time to complete.  UPDATE: the build script for Ultra96 v3.0 PYNQ now recovers from disrupted supplemental file downloads!
 
 ### Step 5: Burn the SD image
 Please use Balena Etcher or Win32 Disk Imager to copy the .img file onto an SD card 16GB or larger.  Samsung EVO based SD cards and related rebrands will not boot on the Ultra96.  Delkin and SanDisk uhs-1 type cards work well, other brands may also.
