@@ -30,9 +30,9 @@ fi
 START_DIR=$PWD
 MAIN_DIR="$START_DIR/Ultra96"
 PYNQ_GIT_LOCAL_PATH="$START_DIR/PYNQ-git"
-SD_IMAGE_FILE="$START_DIR/$BOARD_TYPE-3.0.0.img"
-PYNQ_IMAGE_FILE="$PYNQ_GIT_LOCAL_PATH/sdbuild/output/Ultra96-3.0.0.img"
-PYNQ_GIT_TAG=v3.0.0
+SD_IMAGE_FILE="$START_DIR/$BOARD_TYPE-3.0.1.img"
+PYNQ_IMAGE_FILE="$PYNQ_GIT_LOCAL_PATH/sdbuild/output/Ultra96-3.0.1.img"
+PYNQ_GIT_TAG=v3.0.1
 PYNQ_GIT_REPO_URL=https://github.com/Xilinx/PYNQ
 ULTRA96_BOARDDIR=$START_DIR
 SPEC_DIR=specs
@@ -43,10 +43,10 @@ OVERLAY_SEMA_NAME="_""$BOARD_TYPE""_"
 BSP_FILE_PATH=$MAIN_DIR
 BSP_FILE_URL=https://github.com/Avnet/Ultra96-PYNQ/releases/download/v3.0.0
 ROOTFS_TMP_DIR="$START_DIR/rootfs_tmp"
-ROOTFS_ZIP_FILE=jammy.aarch64.3.0.0.tar.gz
-PREBUILT_IMAGE_ZIP_FILE=pynq-3.0.0.tar.gz
-ROOTFS_IMAGE_FILE_URL=https://www.xilinx.com/bin/public/openDownload?filename=jammy.aarch64.3.0.0.tar.gz
-PREBUILT_IMAGE_FILE_URL=https://github.com/Xilinx/PYNQ/releases/download/v3.0.0/pynq-3.0.0.tar.gz
+ROOTFS_ZIP_FILE=jammy.aarch64.3.0.1.tar.gz
+PREBUILT_IMAGE_ZIP_FILE=pynq-3.0.1.tar.gz
+ROOTFS_IMAGE_FILE_URL=https://bit.ly/pynq_aarch64_v3_0_1
+PREBUILT_IMAGE_FILE_URL=https://github.com/Xilinx/PYNQ/releases/download/v3.0.1/pynq-3.0.1.tar.gz
 
 ##################################
 # Fetching and compiling         #
