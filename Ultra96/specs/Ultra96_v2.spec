@@ -5,4 +5,4 @@ FPGA_MANAGER_Ultra96 := 1
 
 # Note: for PYNQ v3.0 mraa & ump packages are out of date and deprecated (not installed)
 STAGE4_PACKAGES_Ultra96 := pynq usbgadget usb-eth0 pynq_selftest
-STAGE4_PACKAGES_Ultra96 += xrt sensorconf-v2 python_pmbus wilc3000
+STAGE4_PACKAGES_Ultra96 += xrt sensorconf-v2 python_pmbus wilc3000 ipycanvas juliabrot
