@@ -8,8 +8,6 @@ PYNQ
 ====
 * http://www.pynq.io
 * https://pynq.readthedocs.io
-* https://www.hackster.io/pynq
-* https://groups.google.com/forum/#!forum/pynq_project
 
 
 Ultra96
