@@ -3,7 +3,7 @@
 ![alt tag](./software.png)
 
 ## Grab the pre-built SD images
-[Click here to obtain SD card images for Ultra96 v1 or v2](http://www.pynq.io/board.html)
+[Click here to obtain SD card images for Ultra96 v1 or v2](http://www.pynq.io/boards.html)
 
 ## Need a little help building your own Vivado Ultra96 Overlays?
 See the Ultra96 Jupyter Notebooks folder: creating_Ultra96_overlays.ipynb
