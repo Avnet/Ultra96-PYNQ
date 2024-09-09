@@ -12,7 +12,7 @@ PYNQ
 
 Ultra96
 =======
-* http://zedboard.org/product/ultra96
+* https://www.avnet.com/wps/portal/us/products/avnet-boards/avnet-board-families/ultra96-v2/
 * https://www.96boards.org/product/ultra96
 * https://www.xilinx.com/products/boards-and-kits/1-vad4rl.html
 
