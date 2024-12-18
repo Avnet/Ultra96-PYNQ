@@ -8,7 +8,7 @@ set -e
 for f in /etc/profile.d/*.sh; do source $f; done
 
 cd $PYNQ_JUPYTER_NOTEBOOKS
-git clone https://github.com/FredKellerman/PYNQ-juliabrot -b v1.0.3
+git clone https://github.com/FredKellerman/PYNQ-juliabrot -b v1.0.4
 cd PYNQ-juliabrot
 rm -rf .git
 rm .gitignore
