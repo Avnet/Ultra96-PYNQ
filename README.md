@@ -44,10 +44,10 @@ Make sure you 'source' the settings64.sh (Vivado) and settings.sh (PetaLinux) sc
 ### Step 3: Clone the Ultra96 repository
 Retrieve the Ultra96 PYNQ board git into a new directory somewhere outside the prior PYNQ git directory.
 
-Clone the Ultra96-PYNQ git repo and checkout the `image_v3.0` branch.
+Clone the Ultra96-PYNQ git repo and checkout the `image_v3.0.1` branch.
 
 ```shell
-git clone https://github.com/Avnet/Ultra96-PYNQ.git --branch image_v3.0
+git clone https://github.com/Avnet/Ultra96-PYNQ.git --branch image_v3.0.1
 ```
 
 ### Step 4: Build the SD image for Ultra96
